@@ -1,4 +1,5 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">
 <web-app>
 	<description>Lego Based On Palestink Framework</description>
 	<display-name>Lego</display-name>
@@ -22,8 +23,8 @@
 	</context-param>
 	<context-param>
 		<param-name>db_url</param-name>
-		<!-- <param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value> -->
-		<param-value><![CDATA[jdbc:mysql://192.168.1.131:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value>
+		<param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value>
+		<!-- <param-value><![CDATA[jdbc:mysql://192.168.1.131:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>db_username</param-name>
