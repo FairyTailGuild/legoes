@@ -1,0 +1,7 @@
+﻿<?xml version = "1.0" encoding = "utf-8"?>
+<config>
+	<!-- 账号冻结的失败重试次数（默认：5次） -->
+	<frozenFailedRetryCount>5</frozenFailedRetryCount>
+	<!-- 账户冻结时间（默认：10分钟） -->
+	<frozenTime>600000</frozenTime>
+</config>

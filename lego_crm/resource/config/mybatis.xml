@@ -1,0 +1,338 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_crm">
+        <!-- 联系人[crm_contact] -->
+        <insert id = "insertContact" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `crm_contact` (`uuid`, `name`, `enterprise_uuid`, `position`, `contact_information_list`, `remark`, `create_datetime`) values (#{uuid}, #{name}, #{enterprise_uuid}, #{position}, #{contact_information_list}, #{remark}, now())]]>
+        </insert>
+        <delete id = "deleteContact" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `crm_contact`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != enterprise_uuid">
+                                <![CDATA[and `enterprise_uuid` = #{enterprise_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateContact" parameterType = "java.util.HashMap">
+                <![CDATA[update `crm_contact`]]>
+                <set>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != enterprise_uuid">
+                                <![CDATA[`enterprise_uuid` = #{enterprise_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_enterprise_uuid">
+                                <![CDATA[`enterprise_uuid` = null,]]>
+                        </if>
+                        <if test = "null != position">
+                                <![CDATA[`position` = #{position},]]>
+                        </if>
+                        <if test = "'set_null' == sn_position">
+                                <![CDATA[`position` = null,]]>
+                        </if>
+                        <if test = "null != contact_information_list">
+                                <![CDATA[`contact_information_list` = #{contact_information_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contact_information_list">
+                                <![CDATA[`contact_information_list` = null,]]>
+                        </if>
+                        <if test = "null != remark">
+                                <![CDATA[`remark` = #{remark},]]>
+                        </if>
+                        <if test = "'set_null' == sn_remark">
+                                <![CDATA[`remark` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectContact" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `crm_contact`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != name_fuzzy">
+                                <![CDATA[and `name` like CONCAT('%',#{name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != enterprise_uuid">
+                                <![CDATA[and `enterprise_uuid` = #{enterprise_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 企业信息[crm_enterprise-information] -->
+        <insert id = "insertEnterpriseInformation" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `crm_enterprise-information` (`uuid`, `type`, `name`, `short_name`, `registered_capital`, `establish_datetime`, `description`, `create_datetime`) values (#{uuid}, #{type}, #{name}, #{short_name}, #{registered_capital}, #{establish_datetime}, #{description}, now())]]>
+        </insert>
+        <delete id = "deleteEnterpriseInformation" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `crm_enterprise-information`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[and `type` = #{type}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateEnterpriseInformation" parameterType = "java.util.HashMap">
+                <![CDATA[update `crm_enterprise-information`]]>
+                <set>
+                        <if test = "null != type">
+                                <![CDATA[`type` = #{type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_type">
+                                <![CDATA[`type` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != short_name">
+                                <![CDATA[`short_name` = #{short_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_short_name">
+                                <![CDATA[`short_name` = null,]]>
+                        </if>
+                        <if test = "null != registered_capital">
+                                <![CDATA[`registered_capital` = #{registered_capital},]]>
+                        </if>
+                        <if test = "'set_null' == sn_registered_capital">
+                                <![CDATA[`registered_capital` = null,]]>
+                        </if>
+                        <if test = "null != establish_datetime">
+                                <![CDATA[`establish_datetime` = #{establish_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_establish_datetime">
+                                <![CDATA[`establish_datetime` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectEnterpriseInformation" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `crm_enterprise-information`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[and `type` = #{type}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != short_name">
+                                <![CDATA[and `short_name` = #{short_name}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 企业证件[crm_enterprise-certificate] -->
+        <insert id = "insertEnterpriseCertificate" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `crm_enterprise-certificate` (`uuid`, `enterprise_uuid`, `idcard_uuid`, `account_opening_permit_uuid`, `business_license_uuid`, `hazardous_chemicals_business_license_uuid`, `institutional_credit_code_uuid`, `invoice_information_uuid`, `safety_production_license_uuid`, `create_datetime`) values (#{uuid}, #{enterprise_uuid}, #{idcard_uuid}, #{account_opening_permit_id}, #{business_license_uuid}, #{hazardous_chemicals_business_license_uuid}, #{institutional_credit_code_uuid}, #{invoice_information_uuid}, #{safety_production_license_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteEnterpriseCertificate" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `crm_enterprise-certificate`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != enterprise_uuid">
+                                <![CDATA[and `enterprise_uuid` = #{enterprise_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateEnterpriseCertificate" parameterType = "java.util.HashMap">
+                <![CDATA[update `crm_enterprise-certificate`]]>
+                <set>
+                        <if test = "null != idcard_uuid">
+                                <![CDATA[`idcard_uuid` = #{idcard_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_idcard_uuid">
+                                <![CDATA[`idcard_uuid` = null,]]>
+                        </if>
+                        <if test = "null != account_opening_permit_uuid">
+                                <![CDATA[`account_opening_permit_uuid` = #{account_opening_permit_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_account_opening_permit_uuid">
+                                <![CDATA[`account_opening_permit_uuid` = null,]]>
+                        </if>
+                        <if test = "null != business_license_uuid">
+                                <![CDATA[`business_license_uuid` = #{business_license_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_business_license_uuid">
+                                <![CDATA[`business_license_uuid` = null,]]>
+                        </if>
+                        <if test = "null != hazardous_chemicals_business_license_uuid">
+                                <![CDATA[`hazardous_chemicals_business_license_uuid` = #{hazardous_chemicals_business_license_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_hazardous_chemicals_business_license_uuid">
+                                <![CDATA[`hazardous_chemicals_business_license_uuid` = null,]]>
+                        </if>
+                        <if test = "null != institutional_credit_code_uuid">
+                                <![CDATA[`institutional_credit_code_uuid` = #{institutional_credit_code_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_institutional_credit_code_uuid">
+                                <![CDATA[`institutional_credit_code_uuid` = null,]]>
+                        </if>
+                        <if test = "null != invoice_information_uuid">
+                                <![CDATA[`invoice_information_uuid` = #{invoice_information_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_invoice_information_uuid">
+                                <![CDATA[`invoice_information_uuid` = null,]]>
+                        </if>
+                        <if test = "null != safety_production_license_uuid">
+                                <![CDATA[`safety_production_license_uuid` = #{safety_production_license_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_safety_production_license_uuid">
+                                <![CDATA[`safety_production_license_uuid` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != enterprise_uuid">
+                                <![CDATA[and `enterprise_uuid` = #{enterprise_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectEnterpriseCertificate" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `crm_enterprise-certificate`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != enterprise_uuid">
+                                <![CDATA[and `enterprise_uuid` = #{enterprise_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 企业流水账[crm_enterprise-journal-account] -->
+        <insert id = "insertEnterpriseJournalAccount" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `crm_enterprise-journal-account` (`uuid`, `enterprise_uuid`, `type`, `name`, `description`, `price`, `count`, `record_datetime`, `create_datetime`) values (#{uuid}, #{enterprise_uuid}, #{type}, #{name}, #{description}, #{price}, #{count}, #{record_datetime}, now())]]>
+        </insert>
+        <delete id = "deleteEnterpriseJournalAccount" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `crm_enterprise-journal-account`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != enterprise_uuid">
+                                <![CDATA[and `enterprise_uuid` = #{enterprise_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateEnterpriseJournalAccount" parameterType = "java.util.HashMap">
+                <![CDATA[update `crm_enterprise-journal-account`]]>
+                <set>
+                        <if test = "null != type">
+                                <![CDATA[`type` = #{type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_type">
+                                <![CDATA[`type` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                        <if test = "null != price">
+                                <![CDATA[`price` = #{price},]]>
+                        </if>
+                        <if test = "'set_null' == sn_price">
+                                <![CDATA[`price` = null,]]>
+                        </if>
+                        <if test = "null != count">
+                                <![CDATA[`count` = #{count},]]>
+                        </if>
+                        <if test = "'set_null' == sn_count">
+                                <![CDATA[`count` = null,]]>
+                        </if>
+                        <if test = "null != record_datetime">
+                                <![CDATA[`record_datetime` = #{record_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_record_datetime">
+                                <![CDATA[`record_datetime` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectEnterpriseJournalAccount" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `crm_enterprise-journal-account`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != enterprise_uuid">
+                                <![CDATA[and `enterprise_uuid` = #{enterprise_uuid}]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[and `type` = #{type}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != name_fuzzy">
+                                <![CDATA[and `name` like CONCAT('%',#{name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != start_datetime and null != end_datetime">
+                                <![CDATA[and `record_datetime` between #{start_datetime} and #{end_datetime}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

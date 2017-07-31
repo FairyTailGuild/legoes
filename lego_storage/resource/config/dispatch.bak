@@ -1,0 +1,1059 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+        <dispatch>
+                <servlet>
+                        <!-- 名称: 上传临时文件 -->
+                        <servletName>uploadTemporaryFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_uploadTemporaryFile</namespace>
+                        <permission>storage_uploadTemporaryFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 附件（尺寸小于等于30M，格式为：txt|jpg|gif|png|pdf|zip|rar|doc|docx|xls|xls） -->
+                                        <name>attachment</name>
+                                        <type>file</type>
+                                        <fileType>.+\.(txt|jpg|gif|png|pdf|zip|rar|doc|docx|xls|xlsx)$</fileType>
+                                        <fileMaxSize>30000000</fileMaxSize>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录（临时文件根目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 临时文件上传（资源管理器） -->
+                        <!-- ERROR_1: 没有找到directory_uuid对应的数据。 -->
+                        <!-- ERROR_2: 数据写入文件集群表出错。 -->
+                        <!-- ERROR_3: 数据写入文件表出错。 -->
+                        <servletName>uploadExplorerFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_uploadTempFile</namespace>
+                        <permission>storage_uploadTempFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 附件（尺寸小于等于30M，格式为：txt|jpg|gif|png|pdf|zip|rar|doc|docx|xls|xls） -->
+                                        <name>attachment</name>
+                                        <type>file</type>
+                                        <fileType>.+\.(txt|jpg|gif|png|pdf|zip|rar|doc|docx|xls|xlsx)$</fileType>
+                                        <fileMaxSize>30000000</fileMaxSize>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 保存为正式文件 -->
+                        <!-- ERROR_1: 文件不存在。 -->
+                        <!-- ERROR_2: 修改文件有效期出错。 -->
+                        <!-- ERROR_3: 操作异常。 -->
+                        <servletName>saveFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_saveFile</namespace>
+                        <permission>storage_saveFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改文件名 -->
+                        <servletName>renameFile</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkFileExist:directory_uuid,cluster_name,file_status->status,creator_uuid;custom,t_checkFileNameNotExist:directory_uuid,cluster_name,name,creator_uuid;update,updateFile:name,cluster_name,creator_uuid</namespace>
+                        <permission>storage_renameFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件名（1-16个汉字、字符、数字、下划线或横线） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z_-]{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除文件 -->
+                        <!-- ERROR_1: 文件不存在。 -->
+                        <!-- ERROR_2: 删除“文件表”中数据出错。 -->
+                        <!-- ERROR_3: 更新“集群表”过期出错。 -->
+                        <!-- ERROR_4: 操作异常。 -->
+                        <servletName>removeFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeFile</namespace>
+                        <permission>storage_removeFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 创建根目录 -->
+                        <servletName>createRootDirectory</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkDirectoryNameNotExist:parent_uuid,name,creator_uuid;insert,insertDirectory:parent_uuid,uuid,name,description,creator_uuid</namespace>
+                        <permission>storage_createRootDirectory</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 父目录uuid（根目录默认为0） -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>00000000000000000000000000000000</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 随机生成的代码（不带“-”的uuid） -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 名称（1-16个汉字、字符、数字、下划线或横线） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z_-]{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 创建子目录 -->
+                        <servletName>createSubDirectory</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkDirectoryExist:parent_uuid->uuid,creator_uuid;custom,t_checkDirectoryNameNotExist:parent_uuid,uuid,name,creator_uuid;insert,insertDirectory:uuid,parent_uuid,name,description,creator_uuid</namespace>
+                        <permission>storage_createSubDirectory</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 随机生成的代码（不带“-”的uuid） -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 名称（1-16个汉字、字符、数字、下划线或横线） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z_-]{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改目录 -->
+                        <servletName>modifyDirectory</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkDirectoryExist:parent_uuid->uuid,creator_uuid;custom,t_checkDirectoryNameNotExist:parent_uuid,uuid->ne_uuid,name,creator_uuid;update,updateDirectory:uuid,parent_uuid,name,description,sn_description,creator_uuid</namespace>
+                        <permission>storage_modifyDirectory</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 名称（1-16个汉字、字符、数字、下划线或横线） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z_-]{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别描述（置空） -->
+                                        <name>sn_description</name>
+                                        <type>string</type>
+                                        <format>^set_null$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除目录 -->
+                        <!-- ERROR_1: 删除目录出错。 -->
+                        <!-- ERROR_2: 修改集群文件过期时间出错。 -->
+                        <!-- ERROR_3: 从文件表删除文件数据出错。 -->
+                        <servletName>removeDirectory</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeDirectory</namespace>
+                        <permission>storage_removeDirectory</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取用户所有的目录 -->
+                        <servletName>getDirectory</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectDirectory</namespace>
+                        <permission>storage_getDirectory</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取文件（所属用户） -->
+                        <servletName>getFileByUser</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectFile</namespace>
+                        <permission>storage_getFileByUser</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 名称（1-32个汉字、字符、数字、下划线或横线） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z_-]{1,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取文件（管理员） -->
+                        <servletName>getFileByManager</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectFile</namespace>
+                        <permission>storage_getFileByManager</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 名称（1-32个汉字、字符、数字、下划线或横线） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z_-]{1,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 移动目录 -->
+                        <!-- ERROR_1: 没有查询到directory_uuid对应的类别数据。 -->
+                        <!-- ERROR_2: 父目录不存在。 -->
+                        <!-- ERROR_3: 移动目录出错。 -->
+                        <servletName>moveDirectory</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_moveDirectory</namespace>
+                        <permission>storage_moveDirectory</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 移动文件 -->
+                        <!-- ERROR_1: 没有查询到directory_uuid对应的类别数据。 -->
+                        <!-- ERROR_2: cluster_name的集群编号没有找到。 -->
+                        <!-- ERROR_3: 移动文件出错。 -->
+                        <servletName>moveFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_moveFile</namespace>
+                        <permission>storage_moveFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查文件是否重名 -->
+                        <!-- ERROR_1: 文件不能为空。 -->
+                        <!-- ERROR_2: 文件不存在。 -->
+                        <!-- ERROR_3: 操作异常。 -->
+                        <servletName>checkFileNameExist</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_checkFileNameExist</namespace>
+                        <permission>storage_checkFileNameExist</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件名（1-16个汉字、字符、数字、下划线或横线） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z_-]{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查目录是否重名 -->
+                        <!-- ERROR_1: 父目录不能为空。 -->
+                        <!-- ERROR_2: 目录重名。 -->
+                        <!-- ERROR_3: 操作异常。 -->
+                        <servletName>checkDirectoryNameExist</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_checkDirectoryNameExist</namespace>
+                        <permission>storage_checkDirectoryNameExist</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件名（1-16个汉字、字符、数字、下划线或横线） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z_-]{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>c_checkDirectoryExist</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_checkDirectoryExist</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>c_checkDirectoryNameExist</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_checkDirectoryNameExist</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- ne_uuid -->
+                                        <name>ne_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^.{1,100}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>c_checkFileExist</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_checkFileExist</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>c_checkFileNameExist</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_checkFileNameExist</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^.{1,100}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>c_moveDirectory</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_moveDirectory</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>c_moveFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_moveFile</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>c_removeDirectory</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeDirectory</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>c_removeFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeFile</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>t_checkDirectoryExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkDirectoryExist</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>t_checkDirectoryNameExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkDirectoryNameExist</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- ne_uuid -->
+                                        <name>ne_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^.{1,100}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>t_checkFilesExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkFilesExist</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>t_checkFileNameExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkFileNameExist</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^.{1,100}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^.{1,100}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>t_moveDirectory</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_moveDirectory</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 父目录uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>t_moveFile</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_moveFile</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 目录uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^.{1,100}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>t_removeDirectory</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_removeDirectory</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <servletName>t_removeFile</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_removeFile</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+        </dispatch>
+</config>

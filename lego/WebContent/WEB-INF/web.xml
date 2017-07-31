@@ -1,0 +1,52 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<web-app>
+	<description>Lego Based On Palestink Framework</description>
+	<display-name>Lego</display-name>
+	<!-- 设置转换编码 -->
+	<filter>
+		<filter-name>transformFilter</filter-name>
+		<filter-class>framework.filter.TransformFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>transformFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- 设置数据库配置信息 -->
+	<context-param>
+		<param-name>db_driver</param-name>
+		<param-value>com.mysql.jdbc.Driver</param-value>
+	</context-param>
+	<context-param>
+		<param-name>db_url</param-name>
+		<!-- <param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value> -->
+		<param-value><![CDATA[jdbc:mysql://192.168.1.131:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value>
+	</context-param>
+	<context-param>
+		<param-name>db_username</param-name>
+		<param-value>root</param-value>
+	</context-param>
+	<context-param>
+		<param-name>db_password</param-name>
+		<param-value>5695234</param-value>
+	</context-param>
+	<context-param>
+		<param-name>db_poolMaximumActiveConnections</param-name>
+		<param-value>80</param-value>
+	</context-param>
+	<!-- 设置Api配置信息 -->
+	<context-param>
+		<param-name>debugEnable</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<session-config>
+		<session-timeout>10</session-timeout>
+	</session-config>
+	<!-- 设置加载资源的入口 -->
+	<listener>
+		<listener-class>framework.core.LoadResource</listener-class>
+	</listener>
+</web-app>

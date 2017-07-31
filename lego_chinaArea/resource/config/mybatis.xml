@@ -1,0 +1,67 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_chinaArea">
+        <!-- 中国区域_省、直辖市[china-area_province] -->
+        <!-- 获取中国区域_省、直辖市 -->
+        <select id = "selectProvince" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `china-area_province`]]>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                        <if test = "null != code">
+                                <![CDATA[and `code` = #{code}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                </where>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 中国区域_市[china-area_province] -->
+        <!-- 获取中国区域_市 -->
+        <select id = "selectCity" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `china-area_city`]]>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                        <if test = "null != code">
+                                <![CDATA[and `code` = #{code}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != province_code">
+                                <![CDATA[and `province_code` = #{province_code}]]>
+                        </if>
+                </where>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 中国区域_区[china-area_district] -->
+        <!-- 获取中国区域_区 -->
+        <select id = "selectDistrict" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `china-area_district`]]>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                        <if test = "null != code">
+                                <![CDATA[and `code` = #{code}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != city_code">
+                                <![CDATA[and `city_code` = #{city_code}]]>
+                        </if>
+                </where>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

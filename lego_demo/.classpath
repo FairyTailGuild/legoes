@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="resource/jar/blackpearl/blackpearl.jar" sourcepath="/blackpearl/src"/>
+	<classpathentry kind="lib" path="resource/jar/json/json-20160212.jar"/>
+	<classpathentry kind="lib" path="resource/jar/servlet/servlet-api.jar"/>
+	<classpathentry kind="lib" path="resource/jar/mybatis/mybatis-3.4.1.jar"/>
+	<classpathentry kind="lib" path="resource/jar/palestink/palestinkSdk.jar" sourcepath="/palestink/src"/>
+	<classpathentry kind="lib" path="resource/jar/dom4j/dom4j-1.6.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

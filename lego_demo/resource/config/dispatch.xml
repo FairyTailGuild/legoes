@@ -1,0 +1,428 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<dispatch>
+                <!-- [示例开始]
+                <servlet>
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // servletName是确定servlet身份的唯一标识，当前文件内不可重复。
+                        <servletName>register</servletName>
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // sdboType是数据操作类型，它有两种情况：
+                        // 1 SimpleDBO(sdbo)操作，包括5种类型：
+                                // 1.1 insert 数据库insert操作
+                                // 1.2 delete 数据库delete操作
+                                // 1.3 update 数据库update操作
+                                // 1.4 select 数据库select操作
+                                // 1.5 transaction 数据库事务操作
+                        // 2 自定义操作, 值为custom。框架调用时会主动寻找“模块名称（包名）.Custom”这个类。
+                        // 即，sdboType的填写选项为：insert、delete、update、select、transaction、custom六个选项。
+                        <sdboType>insert</sdboType>
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // namespace是数据操作名空间，它有四种情况：
+                        // 1 mybatis配置文件中的名空间。注意：该功能模块的名称默认与mybatis配置文件中的namespace相同。所以这里只需要填写mapper下的id名称即可。比如：<namespace>checkExist</namespace>
+                        // 2 当sdboType为custom时，namespace当做Custom类中的方法名执行。该方法为无参void类型，格式为：public void function() {}。比如：<namespace>login</namespace>
+                        // 3 当sdboType为custom时，且namespace以@开头时，格式为：包名.类名.方法名。。比如：<namespace>@lego_user.Custom.login</namespace>
+                        // 4 当sdboType为transaction时，namespace的数据形式为：操作类型,mybatis对应id:参数名A,参数名B,参数名C;操作类型,mybatis对应id:参数名A,参数名B,参数名C。
+                        // 注意：事务中的参数名用“->”可以更改传入mybatis中的名称，比如：updateCluster:cluster_name->name,expire_datetime，虽然在dispatch.xml中接收的是cluster_name但是传入事务中，参数名就为name。
+                        // 其中，操作类型包括：
+                        // 3.1 insert（操作结果大于等于1时，继续往下进行）
+                        // 3.2 delete（操作结果大于等于1时，继续往下进行）
+                        // 3.3 update（操作结果大于等于1时，继续往下进行）
+                        // 3.4 select（检索到数据，继续往下进行）
+                        // 3.5 insist-insert（不论结果继续往下进行）
+                        // 3.6 insist-delete（不论结果继续往下进行）
+                        // 3.7 insist-update（不论结果继续往下进行）
+                        // 3.8 non-insert（与insert相反，操作结果小于1时，继续往下进行）
+                        // 3.9 non-delete（与delete相反，操作结果小于1时，继续往下进行）
+                        // 3.10 non-update（与update相反，操作结果小于1时，继续往下进行）
+                        // 3.11 non-select（没有检索到数据，继续往下进行）
+                        // 3.12 return-select->结果集存放的别名|获取数据的列名（返回检索到的结果集）
+                        // 3.13 foreach-delete->结果集存放的别名|传入的参数名（遍历结果集中的每一条数据，重复执行删除操作）
+                        // 3.14 foreach-insist-delete->结果集存放的别名|传入的参数名（遍历结果集中的每一条数据，不论结果的重复执行删除操作）
+                        // 3.15 foreach-update->结果集存放的别名|传入的参数名（遍历结果集中的每一条数据，重复执行修改操作）
+                        // 3.16 foreach-insist-update->结果集存放的别名|传入的参数名（遍历结果集中的每一条数据，不论结果的重复执行修改操作）
+                        // 3.17 foreach-select->结果集存放的别名|传入的参数名|获取数据的列名|新结果集存放的别名（遍历结果集中的每一条数据，重复执行查询操作。如果获取数据的列名为空，直接返回数据）
+                        // 3.17 foreach-non-select->结果集存放的别名|传入的参数名（遍历结果集中的每一条数据，重复执行查询操作。如果没有检索到数据，继续往下进行）
+                        // 3.18 foreach-custom->结果集存放的别名|传入的参数名（遍历结果集中的每一条数据，重复执行自定义的事务操作）
+                        // 3.19 custom（自定义类的方法返回结果等于1，继续往下进行）
+                        // 比如：当insert操作大于1、update操作大于1、delete操作大于1、select操作结果不为空、non-select操作结果为空、custom操作等于1时，事务提交，否则回滚。比如：<namespace>update,transaction_modifyName_ok:id,name;update,transaction_modifySex_ok:id,sex;cusom,lego_user.login</namespace>
+                        <namespace>insertUser</namespace>
+                        // 在当前模块下，namespace对于mybatis来讲，其实是：“模块名称.namespace”的形式。当以@开头时，对于mybatis来说，就是namespace的内容（常用在不同模块间的数据操作）。比如：<namespace>@lego_other.insertData</namespace>
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // permission是操作该servlet所需的权限，它有两种情况：
+                        // 1 没有角色要求，置为none。比如：<permission>none</permission>
+                        // 2 拥有角色要求，设置一个“字符串”。一般登录后的用户在session里会保存多个角色，并且用“;”分隔。通过比较二者就能得到操作权限。
+                        <permission>none</permission>
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        // 所需参数集合，如果没有参数，那么可不设置此标签。
+                        <parameters>
+                                <parameter>
+                                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        // 参数名
+                                        <name>name</name>
+                                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        // 参数类型，包括5种类型：
+                                        // 1 string 后台转换成java.lang.String
+                                        // 2 integer 后台转换成java.lang.Integer
+                                        // 3 double 后台转换成java.lang.Double
+                                        // 4 timestamp 后台转换成java.sql.Timestamp
+                                        // 5 jsonobject 后台以new JSONObject()构造函数接收，如果是合法的json格式，返回json格式的String字符串
+                                        // 6 jsonarray 后台以new JSONArray()构造函数接收，如果是合法的json格式，返回json格式的String字符串
+                                        // 7 file 后台以java.io.File进行处理
+                                        // 即，type的填写选项为：string、integer、double、timestamp、json、file五个选项。
+                                        <type>string</type>
+                                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        // 参数格式，包括2种情况
+                                        // 1 校验参数内容的正则表达式，比如：<format>.{4,32}</format>
+                                        // 2 常量。比如：<format>#constant#</format>
+                                        <format>.{4,32}</format>
+                                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        // 转码，包括1种类型（随时更新）：
+                                        // 1 #encrypt_md5 将数据转换为Md5加密后的数据
+                                        <transform>#encrypt_md5</transform>
+                                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        // 常量
+                                        // 当format为“#constant#”时，constant标签才有意义。包括2种情况：
+                                        // 1 外置常量。constant标签的值，为type标签中对应类型的数据。比如，如果type的值是string，那么<constant>helloworld</constant>就是指"helloworld"这个字符串。
+                                        // 2 内置常量。以“#”开始，比如：#session_user_id（Session中的用户编号）、#session_user_role（Session中的用户角色字符串）、#now（获取当前系统时间java.sql.Timestamp类型）#uuid（获取不带横线的uuid）、#null（将对象转换为null值）。
+                                        // 注意：常量必须加type标签标记类型。
+                                        <constant>helloworld</constant>
+                                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        // 参数是否允许为空，包括2中类型：
+                                        // 1 true 允许参数为空。
+                                        // 2 false 不允许参数为空。
+                                        // 注意：format为#constant#（常量）时无效。
+                                        <isNull>false</isNull>
+                                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        // 文件类型校验正则表达式
+                                        // 当type为file时，需要设置此标签对文件的后缀进行校验，校验方式为“正则表达式”。
+                                        // 注意：所有后缀均为小写。
+                                        <fileType>.+\.(jpg|gif|png)$</fileType>
+                                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                        // 文件最大限制
+                                        // 当type为file时，需要设置此标签对文件的尺寸后缀进行校验。
+                                        // 注意：单位为“字节”。
+                                        <fileMaxSize>100000</fileMaxSize>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                [示例结束] -->
+                <servlet>
+                        <!-- 名称: 注册用户 -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=addUser&name=张三&age=24&sex=0&code=370103198410195010&address=山东省东营市&remark=济南的身份证，东营的地址。 -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>addUser</servletName>
+                        <sdboType>insert</sdboType>
+                        <namespace>register</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 姓名（2-16个汉字) -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fff]{2,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 密码（1-16个字符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^.{1,16}$</format>
+                                        <transform>#encrypt_md5</transform>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 年龄（0-200岁之间） -->
+                                        <name>age</name>
+                                        <type>integer</type>
+                                        <format>200|((1[0-9]|\d)?\d)</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（0:女;1:男） -->
+                                        <name>sex</name>
+                                        <type>integer</type>
+                                        <format>^[0,1]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 身份证号码（18位） -->
+                                        <name>code</name>
+                                        <type>string</type>
+                                        <format>^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 家庭住址（1-128个任意字符） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^.{1,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 备注（1-128个任意字符） -->
+                                        <name>remark</name>
+                                        <type>string</type>
+                                        <format>^.{1,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除用户 -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=removeUser&id=1 -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>removeUser</servletName>
+                        <sdboType>delete</sdboType>
+                        <namespace>delete</namespace>
+                        <permission>demo_delete</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]\d*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改信息 -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=modify&id=1&name=张三&age=21&sex=1&code=370103198410195010&address=山东省济南市&remark=市中区 -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>modify</servletName>
+                        <sdboType>update</sdboType>
+                        <namespace>modify</namespace>
+                        <permission>demo_modify</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]\d*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 姓名（2-16个汉字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fff]{2,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 年龄（0-200岁之间） -->
+                                        <name>age</name>
+                                        <type>integer</type>
+                                        <format>200|((1[0-9]|\d)?\d)</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（0：女,1：男） -->
+                                        <name>sex</name>
+                                        <type>integer</type>
+                                        <format>^[0,1]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 身份证号码（18位） -->
+                                        <name>code</name>
+                                        <type>string</type>
+                                        <format>^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 家庭住址（1-128个任意字符） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^.{1,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 备注（1-128个任意字符） -->
+                                        <name>remark</name>
+                                        <type>string</type>
+                                        <format>^.{1,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取信息 -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=getInfo -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>getInfo</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>getInfo</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]\d*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 姓名（2-16个汉字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fff]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 年龄（0-200岁之间） -->
+                                        <name>age</name>
+                                        <type>integer</type>
+                                        <format>200|((1[0-9]|\d)?\d)</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（0:女;1:男） -->
+                                        <name>sex</name>
+                                        <type>integer</type>
+                                        <format>^[0,1]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取计数（无参数列表） -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=getCount -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>getCount</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>getCount</namespace>
+                        <permission>none</permission>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 登录（自定义操作示例。登陆后，获得“所有”权限。用户名和密码均为“admin”） -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=login -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>login</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>login</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 登录用户名（1-16个任意字符） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^.{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登录密码（1-16个任意字符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^.{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 退出（自定义操作示例。退出后，失去admin权限） -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=logout -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>logout</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>logout</namespace>
+                        <permission>demo_login</permission>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改人员信息（sdbo事务成功示例） -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=modifyNameSexOk&id=1&name=航航事务&sex=0 -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>modifyNameSexOk</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>update,transaction_modifyName_ok:id,name;update,transaction_modifySex_ok:id,sex</namespace>
+                        <permission>demo_modifyNameSexOk</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]\d*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 姓名（2-16个汉字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fff]{2,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（0:女;1:男） -->
+                                        <name>sex</name>
+                                        <type>integer</type>
+                                        <format>^[0,1]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改人员信息（sdbo事务失败示例） -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=modifyNameSexErr&id=1&name=航航事务&sex=0 -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>modifyNameSexErr</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>update,transaction_modifyName_ok:id,name;update,transaction_modifySex_err:sex</namespace>
+                        <permission>demo_modifyNameSexErr</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]\d*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 姓名（2-16个汉字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fff]{2,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（0:女;1:男） -->
+                                        <name>sex</name>
+                                        <type>integer</type>
+                                        <format>^[0,1]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 容颜永驻（自定义事务示例，接收3个参数。首先修改与id对应的年龄，然后读取与id对应的性别和性别，如果是男性则提交修改，如果是女性且年龄大于18岁则取消修改） -->
+                        <!-- 请求地址: ${PROJECT_NAME}/lego/lego_demo?servletName=keepBeauty&id=1&sex=0&age=23 -->
+                        <!-- 请求方式: get|post -->
+                        <servletName>keepBeauty</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>keepBeauty</namespace>
+                        <permission>demo_keepBeauty</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]\d*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（0:女;1:男） -->
+                                        <name>sex</name>
+                                        <type>integer</type>
+                                        <format>^[0,1]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 年龄（0-200岁之间） -->
+                                        <name>age</name>
+                                        <type>integer</type>
+                                        <format>200|((1[0-9]|\d)?\d)</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+	</dispatch>
+</config>

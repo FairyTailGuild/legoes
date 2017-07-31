@@ -1,0 +1,235 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_communication">
+        <!-- 好友列表[communication_buddy] -->
+        <insert id = "insertBuddy" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `communication_buddy` (`uuid`, `list`, `creator_uuid`) values (#{uuid}, #{list}, #{creator_uuid})]]>
+        </insert>
+        <delete id = "deleteBuddy" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `communication_buddy`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateBuddy" parameterType = "java.util.HashMap">
+                <![CDATA[update `communication_buddy`]]>
+                <set>
+                        <if test = "null != list">
+                                <![CDATA[`list` = #{list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_list">
+                                <![CDATA[`list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectBuddy" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `communication_buddy`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 配置[communication_config] -->
+        <insert id = "insertConfig" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `communication_config` (`uuid`, `creator_uuid`) values (#{uuid}, #{creator_uuid})]]>
+        </insert>
+        <update id = "updateConfig" parameterType = "java.util.HashMap">
+                <![CDATA[update `communication_config`]]>
+                <set>
+                        <if test = "null != strangers_message_enable">
+                                <![CDATA[`strangers_message_enable` = #{strangers_message_enable},]]>
+                        </if>
+                        <if test = "'set_null' == sn_strangers_message_enable">
+                                <![CDATA[`strangers_message_enable` = null,]]>
+                        </if>
+                        <if test = "null != flash_prompt_enable">
+                                <![CDATA[`flash_prompt_enable` = #{flash_prompt_enable},]]>
+                        </if>
+                        <if test = "'set_null' == sn_flash_prompt_enable">
+                                <![CDATA[`flash_prompt_enable` = null,]]>
+                        </if>
+                        <if test = "null != sound_prompt_enable">
+                                <![CDATA[`sound_prompt_enable` = #{sound_prompt_enable},]]>
+                        </if>
+                        <if test = "'set_null' == sn_sound_prompt_enable">
+                                <![CDATA[`sound_prompt_enable` = null,]]>
+                        </if>
+                        <if test = "null != language_display">
+                                <![CDATA[`language_display` = #{language_display},]]>
+                        </if>
+                        <if test = "'set_null' == sn_language_display">
+                                <![CDATA[`language_display` = null,]]>
+                        </if>
+                        <if test = "null != client_autorun">
+                                <![CDATA[`client_autorun` = #{client_autorun},]]>
+                        </if>
+                        <if test = "'set_null' == sn_client_autorun">
+                                <![CDATA[`client_autorun` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectConfig" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `communication_config`]]>
+                <where>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 消息[communication_message] -->
+        <insert id = "insertMessage" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `communication_message` (`uuid`, `message_type`, `title`, `content`, `content_type`, `sender_id`, `receiver_list`, `carbon_copy_list`, `blind_carbon_copy_list`, `cluster_list`, `create_datetime`, `read_status`) values (#{uuid}, #{message_type}, #{title}, #{content}, #{content_type}, #{sender_id}, #{receiver_list}, #{carbon_copy_list}, #{blind_carbon_copy_list}, #{cluster_list}, now(), #{read_status})]]>
+        </insert>
+        <delete id = "deleteMessage" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `communication_message`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateMessage" parameterType = "java.util.HashMap">
+                <![CDATA[update `communication_message`]]>
+                <set>
+                        <if test = "null != message_type">
+                                <![CDATA[`message_type` = #{message_type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_message_type">
+                                <![CDATA[`message_type` = null,]]>
+                        </if>
+                        <if test = "null != title">
+                                <![CDATA[`title` = #{title},]]>
+                        </if>
+                        <if test = "'set_null' == sn_title">
+                                <![CDATA[`title` = null,]]>
+                        </if>
+                        <if test = "null != content">
+                                <![CDATA[`content` = #{content},]]>
+                        </if>
+                        <if test = "'set_null' == sn_content">
+                                <![CDATA[`content` = null,]]>
+                        </if>
+                        <if test = "null != content_type">
+                                <![CDATA[`content_type` = #{content_type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_content_type">
+                                <![CDATA[`content_type` = null,]]>
+                        </if>
+                        <if test = "null != sender_id">
+                                <![CDATA[`sender_id` = #{sender_id},]]>
+                        </if>
+                        <if test = "'set_null' == sn_sender_id">
+                                <![CDATA[`sender_id` = null,]]>
+                        </if>
+                        <if test = "null != receiver_list">
+                                <![CDATA[`receiver_list` = #{receiver_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_receiver_list">
+                                <![CDATA[`receiver_list` = null,]]>
+                        </if>
+                        <if test = "null != carbon_copy_list">
+                                <![CDATA[`carbon_copy_list` = #{carbon_copy_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_carbon_copy_list">
+                                <![CDATA[`carbon_copy_list` = null,]]>
+                        </if>
+                        <if test = "null != blind_carbon_copy_list">
+                                <![CDATA[`blind_carbon_copy_list` = #{blind_carbon_copy_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_blind_carbon_copy_list">
+                                <![CDATA[`blind_carbon_copy_list` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != read_status">
+                                <![CDATA[`read_status` = #{read_status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_read_status">
+                                <![CDATA[`read_status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != w_title">
+                                <![CDATA[and `title` = #{w_title}]]>
+                        </if>
+                        <if test = "null != message_type">
+                                <![CDATA[and `message_type` = #{message_type}]]>
+                        </if>
+                        <if test = "null != content_type">
+                                <![CDATA[and `content_type` = #{content_type}]]>
+                        </if>
+                        <if test = "null != sender_id">
+                                <![CDATA[and `sender_id` = #{sender_id}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectMessage" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `communication_message`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != title">
+                                <![CDATA[and `title` = #{title}]]>
+                        </if>
+                        <if test = "null != message_type">
+                                <![CDATA[and `message_type` = #{message_type}]]>
+                        </if>
+                        <if test = "null != content_type">
+                                <![CDATA[and `content_type` = #{content_type}]]>
+                        </if>
+                        <if test = "null != sender_id">
+                                <![CDATA[and `sender_id` = #{sender_id}]]>
+                        </if>
+                        <if test = "null != receiver">
+                                <![CDATA[and `receiver` = #{receiver}]]>
+                        </if>
+                        <if test = "null != read_status">
+                                <![CDATA[and `read_status` = #{read_status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

@@ -1,0 +1,1255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+        <dispatch>
+                <servlet>
+                        <!-- 名称: 添加根部门 -->
+                        <servletName>addRootDepartment</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>non-select,selectDepartment:parent_uuid,name;insert,insertDepartment:uuid,parent_uuid,name,description,order_offset</namespace>
+                        <permission>workflow_addDepartment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 根部门父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>00000000000000000000000000000000</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 排序偏移（默认为0） -->
+                                        <name>order_offset</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加部门 -->
+                        <servletName>addDepartment</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectDepartment:parent_uuid->uuid;non-select,selectDepartment:parent_uuid,name;insert,insertDepartment:uuid,parent_uuid,name,description,order_offset</namespace>
+                        <permission>workflow_addDepartment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 父部门的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 排序偏移（默认为0） -->
+                                        <name>order_offset</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除部门 -->
+                        <!-- ERROR_1: 获取子部门失败。 -->
+                        <!-- ERROR_2: 删除部门下流程失败。 -->
+                        <!-- ERROR_3: 删除部门下岗位失败。 -->
+                        <!-- ERROR_4: 删除部门失败。 -->
+                        <!-- ERROR_5: 未知错误。 -->
+                        <servletName>removeDepartment</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeDepartment</namespace>
+                        <permission>workflow_removeDepartment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改根部门 -->
+                        <servletName>modifyRootDepartment</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectDepartment:uuid;non-select,selectDepartment:uuid->ne_uuid,name;update,updateDepartment:uuid,parent_uuid,name,description,sn_description,order_offset</namespace>
+                        <permission>workflow_modifyDepartment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 根部门的父部门uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>00000000000000000000000000000000</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别描述（置空） -->
+                                        <name>sn_description</name>
+                                        <type>string</type>
+                                        <format>^set_null$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 排序偏移（大于等于0的数字） -->
+                                        <name>order_offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改部门（若移动目录，目标父目录不能为根目录） -->
+                        <servletName>modifyDepartment</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectDepartment:parent_uuid->uuid;non-select,selectDepartment:uuid->ne_uuid,name;update,updateDepartment:uuid,parent_uuid,name,description,sn_description,order_offset</namespace>
+                        <permission>workflow_modifyDepartment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 父部门的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别描述（置空） -->
+                                        <name>sn_description</name>
+                                        <type>string</type>
+                                        <format>^set_null$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 排序偏移（大于等于0的数字） -->
+                                        <name>order_offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取部门 -->
+                        <servletName>getDepartment</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectDepartment</namespace>
+                        <permission>workflow_getDepartment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 父部门的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加岗位 -->
+                        <servletName>addPosition</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectDepartment:department_uuid->uuid;non-select,selectPosition:department_uuid,name;insert,insertPosition:uuid,department_uuid,name,description,order_offset</namespace>
+                        <permission>workflow_addDepartment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门的uuid -->
+                                        <name>department_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 岗位名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 岗位描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 排序偏移（默认为0） -->
+                                        <name>order_offset</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除岗位 -->
+                        <!-- ERROR_1: 更新工作流审批岗位列表失败。 -->
+                        <!-- ERROR_2: 删除工作流审批岗位失败。 -->
+                        <!-- ERROR_3: 未知错误。 -->
+                        <servletName>removePosition</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removePosition</namespace>
+                        <permission>workflow_removePosition</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改岗位 -->
+                        <servletName>modifyPosition</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectDepartment:department_uuid->uuid;non-select,selectPosition:uuid->ne_uuid,name;update,updatePosition:uuid,department_uuid,name,description,sn_description,order_offset</namespace>
+                        <permission>workflow_modifyDepartment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门的uuid -->
+                                        <name>department_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 岗位名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 岗位描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 岗位描述（置空） -->
+                                        <name>sn_description</name>
+                                        <type>string</type>
+                                        <format>^set_null$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 排序偏移（大于等于0的数字） -->
+                                        <name>order_offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取岗位-->
+                        <servletName>getPosition</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectPosition</namespace>
+                        <permission>workflow_getPosition</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门的uuid -->
+                                        <name>department_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加用户员工 -->
+                        <servletName>addUserEmployee</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectPosition:position_uuid->uuid;non-select,selectUserSecurity:name;insert,@lego_user.insertUserSecurity:user_uuid->uuid,name,password,role,failedRetryCount,status;insert,insertEmployee:employee_uuid->uuid,user_uuid,employee_name->name,sex,telephone_number,email,position_uuid,work_area_uuid,order_offset</namespace>
+                        <permission>workflow_addUserEmployee</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- user_uuid主键 -->
+                                        <name>user_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- employee_uuid主键 -->
+                                        <name>employee_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户名（4-16位下划线、横线、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z_-]{4,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 密码（1-16位非空白符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^\S{1,16}$</format>
+                                        <transform>#encrypt_md5</transform>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 微信的openid（12-32位下划线、横线、字符或数字） -->
+                                        <name>wechat_openid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z_-]{12,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户角色（默认为user） -->
+                                        <name>role</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>user</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 失败重试计数（默认为0） -->
+                                        <name>failedRetryCount</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正常 2:冻结 3:锁定） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 姓名（2-32个汉字、字符） -->
+                                        <name>employee_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffaa-zA-Z]{2,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（“男”或“女”） -->
+                                        <name>sex</name>
+                                        <type>string</type>
+                                        <format>^(男|女)$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 电话号码（6-15个数字） -->
+                                        <name>telephone_number</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{6,15}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- Email（Email通用格式） -->
+                                        <name>email</name>
+                                        <type>string</type>
+                                        <format>^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 岗位的uuid -->
+                                        <name>position_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 工作区域的uuid -->
+                                        <name>work_area_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 排序偏移（默认为0） -->
+                                        <name>order_offset</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除员工信息 -->
+                        <!-- ERROR_1: 更新工作流程抄送列表失。 -->
+                        <!-- ERROR_2: 删除员工失败。 -->
+                        <!-- ERROR_3: 未知错误。 -->
+                        <servletName>removeUserEmployee</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeEmployee</namespace>
+                        <permission>workflow_removeEmployee</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 用户uuid -->
+                                        <name>user_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改员工信息 -->
+                        <servletName>modifyEmployee</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectPosition:position_uuid->uuid;update,updateEmployee:user_uuid,employee_name->name,sex,telephone_number,email,position_uuid,work_area_uuid,order_offset</namespace>
+                        <permission>workflow_modifyEmployee</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- user_uuid主键 -->
+                                        <name>user_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 姓名（2-32个汉字、字符） -->
+                                        <name>employee_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffaa-zA-Z]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（“男”或“女”） -->
+                                        <name>sex</name>
+                                        <type>string</type>
+                                        <format>^(男|女)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 电话号码（6-15个数字） -->
+                                        <name>telephone_number</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{6,15}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- Email（Email通用格式） -->
+                                        <name>email</name>
+                                        <type>string</type>
+                                        <format>^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 岗位的uuid -->
+                                        <name>position_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 工作区域的uuid -->
+                                        <name>work_area_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 排序偏移（默认为0） -->
+                                        <name>order_offset</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取员工信息（所属用户） -->
+                        <servletName>getEmployeeByUser</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectEmployee</namespace>
+                        <permission>workflow_getEmployeeByUser</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>user_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取员工信息（管理员） -->
+                        <servletName>getEmployeeByManager</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectEmployee</namespace>
+                        <permission>workflow_getEmployeeByManager</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 用户的uuid -->
+                                        <name>user_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加流程 -->
+                        <!-- ERROR_1: 没有找到对应部门。 -->
+                        <!-- ERROR_2: 部门下工作流已有重名。 -->
+                        <!-- ERROR_3: 工作流审批岗位信息没有找到。 -->
+                        <!-- ERROR_4: 工作流员工抄送信息没有找到。 -->
+                        <!-- ERROR_5: 添加工作流程出错。 -->
+                        <!-- ERROR_6: 未知错误。 -->
+                        <servletName>addProcess</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_addProcess</namespace>
+                        <permission>workflow_addProcess</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 部门编号（大于等于1的数字） -->
+                                        <name>department_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程图标（2-64个任意字符） -->
+                                        <name>icon</name>
+                                        <type>string</type>
+                                        <format>^.{2,64}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（JSONARRAY格式）（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>jsonarray</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 审批所需的岗位（分号分隔的岗位编号） -->
+                                        <name>position_list</name>
+                                        <type>string</type>
+                                        <format>^(([1-9]+[0-9]*)+;)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 审批通过后抄送的员工（分号分隔的员工编号） -->
+                                        <name>cc_list</name>
+                                        <type>string</type>
+                                        <format>^(([1-9]+[0-9]*)+;)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:停用 1:启用） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[01]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除流程 -->
+                        <!-- ERROR_1: 删除作业失败。 -->
+                        <!-- ERROR_2: 删除流程失败。 -->
+                        <!-- ERROR_3: 未知错误。 -->
+                        <servletName>removeProcess</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeProcess</namespace>
+                        <permission>workflow_removeProcess</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 是否强制删除（0:不强制 1:强制） -->
+                                        <!-- 在“不强制”的情况下，当有作业尚未完成时，不能删除当前流程。 -->
+                                        <name>force</name>
+                                        <type>integer</type>
+                                        <format>^[01]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改流程 -->
+                        <!-- ERROR_1: 没有找到对应部门。 -->
+                        <!-- ERROR_2: 部门下工作流已有重名。 -->
+                        <!-- ERROR_3: 工作流审批岗位信息没有找到。 -->
+                        <!-- ERROR_4: 工作流员工抄送信息没有找到。 -->
+                        <!-- ERROR_5: 修改工作流程出错。 -->
+                        <!-- ERROR_6: 未知错误。 -->
+                        <servletName>modifyProcess</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_modifyProcess</namespace>
+                        <permission>workflow_modifyProcess</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程图标（2-64个任意字符） -->
+                                        <name>icon</name>
+                                        <type>string</type>
+                                        <format>^.{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门编号（大于等于1的数字） -->
+                                        <name>department_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别描述（置空） -->
+                                        <name>sn_description</name>
+                                        <type>string</type>
+                                        <format>^set_null$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（JSONARRAY格式）（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>jsonarray</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 审批所需的岗位（分号分隔的岗位编号） -->
+                                        <name>position_list</name>
+                                        <type>string</type>
+                                        <format>^(([1-9]+[0-9]*)+;)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 审批通过后抄送的员工（分号分隔的员工编号） -->
+                                        <name>cc_list</name>
+                                        <type>string</type>
+                                        <format>^(([1-9]+[0-9]*)+;)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:停用 1:启用） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[01]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取工作流流程（包含从属部门关系） -->
+                        <!-- ERROR_1: 未知错误。 -->
+                        <servletName>getProcess</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_getProcess</namespace>
+                        <permission>workflow_getProcess</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 部门编号（大于等于1的数字） -->
+                                        <name>department_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取部门下的员工数量 -->
+                        <!-- ERROR_1: 获取子部门失败。 -->
+                        <!-- ERROR_2: 未知错误。 -->
+                        <servletName>getEmployeeCount</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_getEmployeeCount</namespace>
+                        <permission>workflow_getEmployeeCount</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加作业 -->
+                        <!-- ERROR_1: 没有找到工作流数据。 -->
+                        <!-- ERROR_2: 没有找到工作流附加的文件集群。 -->
+                        <!-- ERROR_3: 保存附件为正式文件出错。 -->
+                        <!-- ERROR_4: 工作流员工抄送信息没有找到。 -->
+                        <!-- ERROR_5: 新增工作流作业出错。 -->
+                        <!-- ERROR_6: 未知错误。 -->
+                        <servletName>addTask</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_addTask</namespace>
+                        <permission>workflow_addTask</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 随机生成的代码（不带“-”的uuid） -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程编号（大于等于1的数字） -->
+                                        <name>process_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（JSONARRAY格式）（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>jsonarray</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群列表（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 审批通过后抄送的员工（分号分隔的员工编号） -->
+                                        <name>cc_list</name>
+                                        <type>string</type>
+                                        <format>^(([1-9]+[0-9]*)+;)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正在审批 2:审批成功 3:审批拒绝 4:审批取消） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 取消作业 -->
+                        <!-- ERROR_1: 没有找到工作流数据。 -->
+                        <!-- ERROR_2: 没有找到工作流附加的文件集群。 -->
+                        <!-- ERROR_3: 修改工作流作业出错。 -->
+                        <!-- ERROR_4: 未知错误。 -->
+                        <servletName>cancelTask</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_cancelTask</namespace>
+                        <permission>workflow_cancelTask</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正在审批 2:审批成功 3:审批拒绝 4:审批取消） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>4</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除作业 -->
+                        <!-- ERROR_1: 删除记录失败。 -->
+                        <!-- ERROR_2: 删除作业附件失败。 -->
+                        <!-- ERROR_3: 删除作业失败。 -->
+                        <!-- ERROR_4: 未知错误。 -->
+                        <servletName>removeTask</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeTask</namespace>
+                        <permission>workflow_removeTask</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取作业（所属用户） -->
+                        <servletName>getTaskByUser</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectTask</namespace>
+                        <permission>workflow_getTaskByUser</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程编号（大于等于1的数字） -->
+                                        <name>process_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正在审批 2:审批成功 3:审批拒绝 4:审批取消） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[1234]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取作业（管理员） -->
+                        <servletName>getTaskByAdmin</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectTask</namespace>
+                        <permission>workflow_getTaskByAdmin</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 流程编号（大于等于1的数字） -->
+                                        <name>process_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正在审批 2:审批成功 3:审批拒绝 4:审批取消） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[1234]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加记录 -->
+                        <!-- ERROR_1: 没有找到正在审批的作业。 -->
+                        <!-- ERROR_2: 没有找到作业所属的工作流。 -->
+                        <!-- ERROR_3: 作业的审批岗位超出流程设置范围。 -->
+                        <!-- ERROR_4: 没有找到当前审批的岗位信息。 -->
+                        <!-- ERROR_5: 没有找到当前审批岗位的员工信息。 -->
+                        <!-- ERROR_6: 当前用户没有审批工作流权限。 -->
+                        <!-- ERROR_7: 添加作业审批记录出错。 -->
+                        <!-- ERROR_8: 拒绝审批时，更新作业审批状态出错。 -->
+                        <!-- ERROR_9: 同意审批时，更新作业审批状态出错。 -->
+                        <!-- ERROR_10: 工作流审批轮至下一岗位时，更新作业审批岗位偏移出错。 -->
+                        <!-- ERROR_11: 未知错误。 -->
+                        <servletName>addRecord</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_addRecord</namespace>
+                        <permission>workflow_addRecord</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 作业编号（大于等于1的数字） -->
+                                        <name>task_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 审批结果（0:拒绝 1:同意） -->
+                                        <name>result</name>
+                                        <type>integer</type>
+                                        <format>^[01]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 审批意见（2-100个汉字、字符或数字） -->
+                                        <name>suggestion</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除记录 -->
+                        <!-- ERROR_1: 删除失败。 -->
+                        <!-- ERROR_2: 未知错误。 -->
+                        <servletName>removeRecord</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeRecord</namespace>
+                        <permission>workflow_removeRecord</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取记录 -->
+                        <servletName>getRecord</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectTask:task_id->id,creator_uuid;select,selectRecord:id,task_id;</namespace>
+                        <permission>workflow_getRecord</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 作业编号（大于等于1的数字） -->
+                                        <name>task_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取内容控件 -->
+                        <servletName>getContentControl</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectContentControl</namespace>
+                        <permission>workflow_getContentControl</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+        </dispatch>
+</config>

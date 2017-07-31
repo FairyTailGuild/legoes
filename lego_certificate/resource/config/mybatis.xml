@@ -1,0 +1,743 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_certificate">
+        <!-- 开户许可证[certificate_account-opening-permit] -->
+        <insert id = "insertAccountOpeningPermit" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `certificate_account-opening-permit` (`uuid`, `parent_uuid`, `cluster_list`, `enterprise_name`, `legal_representative`, `bank_name`, `account`, `status`, `creator_uuid`, `create_datetime`) values (#{uuid}, #{parent_uuid}, #{cluster_list}, #{enterprise_name}, #{legal_representative}, #{bank_name}, #{account}, #{status}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteAccountOpeningPermit" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `certificate_account-opening-permit`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateAccountOpeningPermit" parameterType = "java.util.HashMap">
+                <![CDATA[update `certificate_account-opening-permit`]]>
+                <set>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[`enterprise_name` = #{enterprise_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_enterprise_name">
+                                <![CDATA[`enterprise_name` = null,]]>
+                        </if>
+                        <if test = "null != legal_representative">
+                                <![CDATA[`legal_representative` = #{legal_representative},]]>
+                        </if>
+                        <if test = "'set_null' == sn_legal_representative">
+                                <![CDATA[`legal_representative` = null,]]>
+                        </if>
+                        <if test = "null != bank_name">
+                                <![CDATA[`bank_name` = #{bank_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_bank_name">
+                                <![CDATA[`bank_name` = null,]]>
+                        </if>
+                        <if test = "null != account">
+                                <![CDATA[`account` = #{account},]]>
+                        </if>
+                        <if test = "'set_null' == sn_account">
+                                <![CDATA[`account` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectAccountOpeningPermit" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `certificate_account-opening-permit`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[and `cluster_list` = #{cluster_list}]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[and `enterprise_name` = #{enterprise_name}]]>
+                        </if>
+                        <if test = "null != enterprise_name_fuzzy">
+                                <![CDATA[and `enterprise_name` like CONCAT('%',#{enterprise_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 营业执照[certificate_business-license] -->
+        <insert id = "insertBusinessLicense" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `certificate_business-license` (`uuid`, `parent_uuid`, `cluster_list`, `enterprise_name`, `license_number`, `address`, `legal_representative`, `registered_capital`, `enterprise_type`, `business_scope`, `business_term_start_datetime`, `business_term_end_datetime`, `status`, `creator_uuid`, `create_datetime`) values (#{uuid}, #{parent_uuid}, #{cluster_list}, #{enterprise_name}, #{license_number}, #{address}, #{legal_representative}, #{registered_capital}, #{enterprise_type}, #{business_scope}, #{business_term_start_datetime}, #{business_term_end_datetime}, #{status}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteBusinessLicense" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `certificate_business-license`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateBusinessLicense" parameterType = "java.util.HashMap">
+                <![CDATA[update `certificate_business-license`]]>
+                <set>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[`enterprise_name` = #{enterprise_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_enterprise_name">
+                                <![CDATA[`enterprise_name` = null,]]>
+                        </if>
+                        <if test = "null != license_number">
+                                <![CDATA[`license_number` = #{license_number},]]>
+                        </if>
+                        <if test = "'set_null' == sn_license_number">
+                                <![CDATA[`license_number` = null,]]>
+                        </if>
+                        <if test = "null != address">
+                                <![CDATA[`address` = #{address},]]>
+                        </if>
+                        <if test = "'set_null' == sn_address">
+                                <![CDATA[`address` = null,]]>
+                        </if>
+                        <if test = "null != legal_representative">
+                                <![CDATA[`legal_representative` = #{legal_representative},]]>
+                        </if>
+                        <if test = "'set_null' == sn_legal_representative">
+                                <![CDATA[`legal_representative` = null,]]>
+                        </if>
+                        <if test = "null != registered_capital">
+                                <![CDATA[`registered_capital` = #{registered_capital},]]>
+                        </if>
+                        <if test = "'set_null' == sn_registered_capital">
+                                <![CDATA[`registered_capital` = null,]]>
+                        </if>
+                        <if test = "null != enterprise_type">
+                                <![CDATA[`enterprise_type` = #{enterprise_type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_enterprise_type">
+                                <![CDATA[`enterprise_type` = null,]]>
+                        </if>
+                        <if test = "null != business_scope">
+                                <![CDATA[`business_scope` = #{business_scope},]]>
+                        </if>
+                        <if test = "'set_null' == sn_business_scope">
+                                <![CDATA[`business_scope` = null,]]>
+                        </if>
+                        <if test = "null != business_term_start_datetime">
+                                <![CDATA[`business_term_start_datetime` = #{business_term_start_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_business_term_start_datetime">
+                                <![CDATA[`business_term_start_datetime` = null,]]>
+                        </if>
+                        <if test = "null != business_term_end_datetime">
+                                <![CDATA[`business_term_end_datetime` = #{business_term_end_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_business_term_end_datetime">
+                                <![CDATA[`business_term_end_datetime` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectBusinessLicense" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `certificate_business-license`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[and `cluster_list` = #{cluster_list}]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[and `enterprise_name` = #{enterprise_name}]]>
+                        </if>
+                        <if test = "null != enterprise_name_fuzzy">
+                                <![CDATA[and `enterprise_name` like CONCAT('%',#{enterprise_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 危险化学品经营许可证[certificate_hazardous-chemicals-business-license] -->
+        <insert id = "insertHazardousChemicalsBusinessLicense" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `certificate_hazardous-chemicals-business-license` (`uuid`, `parent_uuid`, `cluster_list`, `enterprise_name`, `address`, `legal_representative`, `business_type`, `permit_scope`, `valid_start_datetime`, `valid_end_datetime`, `status`, `creator_uuid`, `create_datetime`) values (#{uuid}, #{parent_uuid}, #{cluster_list}, #{enterprise_name}, #{address}, #{legal_representative}, #{business_type}, #{permit_scope}, #{valid_start_datetime}, #{valid_end_datetime}, #{status}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteHazardousChemicalsBusinessLicense" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `certificate_hazardous-chemicals-business-license`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateHazardousChemicalsBusinessLicense" parameterType = "java.util.HashMap">
+                <![CDATA[update `certificate_hazardous-chemicals-business-license`]]>
+                <set>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[`enterprise_name` = #{enterprise_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_enterprise_name">
+                                <![CDATA[`enterprise_name` = null,]]>
+                        </if>
+                        <if test = "null != address">
+                                <![CDATA[`address` = #{address},]]>
+                        </if>
+                        <if test = "'set_null' == sn_address">
+                                <![CDATA[`address` = null,]]>
+                        </if>
+                        <if test = "null != legal_representative">
+                                <![CDATA[`legal_representative` = #{legal_representative},]]>
+                        </if>
+                        <if test = "'set_null' == sn_legal_representative">
+                                <![CDATA[`legal_representative` = null,]]>
+                        </if>
+                        <if test = "null != business_type">
+                                <![CDATA[`business_type` = #{business_type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_business_type">
+                                <![CDATA[`business_type` = null,]]>
+                        </if>
+                        <if test = "null != permit_scope">
+                                <![CDATA[`permit_scope` = #{permit_scope},]]>
+                        </if>
+                        <if test = "'set_null' == sn_permit_scope">
+                                <![CDATA[`permit_scope` = null,]]>
+                        </if>
+                        <if test = "null != valid_start_datetime">
+                                <![CDATA[`valid_start_datetime` = #{valid_start_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_valid_start_datetime">
+                                <![CDATA[`valid_start_datetime` = null,]]>
+                        </if>
+                        <if test = "null != valid_end_datetime">
+                                <![CDATA[`valid_end_datetime` = #{valid_end_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_valid_end_datetime">
+                                <![CDATA[`valid_end_datetime` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectHazardousChemicalsBusinessLicense" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `certificate_hazardous-chemicals-business-license`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[and `cluster_list` = #{cluster_list}]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[and `enterprise_name` = #{enterprise_name}]]>
+                        </if>
+                        <if test = "null != enterprise_name_fuzzy">
+                                <![CDATA[and `enterprise_name` like CONCAT('%',#{enterprise_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 身份证[certificate_idcard] -->
+        <insert id = "insertIdCard" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `certificate_idcard` (`uuid`, `parent_uuid`, `cluster_list`, `real_name`, `sex`, `birthday`, `address`, `number`, `valid_start_datetime`, `valid_end_datetime`, `status`, `creator_uuid`, `create_datetime`) values (#{uuid}, #{parent_uuid}, #{cluster_list}, #{real_name}, #{sex}, #{birthday}, #{address}, #{number}, #{valid_start_datetime}, #{valid_end_datetime}, #{status}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteIdCard" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `certificate_idcard`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateIdCard" parameterType = "java.util.HashMap">
+                <![CDATA[update `certificate_idcard`]]>
+                <set>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != real_name">
+                                <![CDATA[`real_name` = #{real_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_real_name">
+                                <![CDATA[`real_name` = null,]]>
+                        </if>
+                        <if test = "null != sex">
+                                <![CDATA[`sex` = #{sex},]]>
+                        </if>
+                        <if test = "'set_null' == sn_sex">
+                                <![CDATA[`sex` = null,]]>
+                        </if>
+                        <if test = "null != birthday">
+                                <![CDATA[`birthday` = #{birthday},]]>
+                        </if>
+                        <if test = "'set_null' == sn_birthday">
+                                <![CDATA[`birthday` = null,]]>
+                        </if>
+                        <if test = "null != address">
+                                <![CDATA[`address` = #{address},]]>
+                        </if>
+                        <if test = "'set_null' == sn_address">
+                                <![CDATA[`address` = null,]]>
+                        </if>
+                        <if test = "null != number">
+                                <![CDATA[`number` = #{number},]]>
+                        </if>
+                        <if test = "'set_null' == sn_number">
+                                <![CDATA[`number` = null,]]>
+                        </if>
+                        <if test = "null != valid_start_datetime">
+                                <![CDATA[`valid_start_datetime` = #{valid_start_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_valid_start_datetime">
+                                <![CDATA[`valid_start_datetime` = null,]]>
+                        </if>
+                        <if test = "null != valid_end_datetime">
+                                <![CDATA[`valid_end_datetime` = #{valid_end_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_valid_end_datetime">
+                                <![CDATA[`valid_end_datetime` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectIdCard" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `certificate_idcard`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[and `cluster_list` = #{cluster_list}]]>
+                        </if>
+                        <if test = "null != real_name">
+                                <![CDATA[and `real_name` = #{real_name}]]>
+                        </if>
+                        <if test = "null != real_name_fuzzy">
+                                <![CDATA[and `real_name` like CONCAT('%',#{real_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 机构信用代码证[certificate_institutional-credit-code] -->
+        <insert id = "insertInstitutionalCreditCode" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `certificate_institutional-credit-code` (`uuid`, `parent_uuid`, `cluster_list`, `enterprise_name`, `code`, `address`, `valid_start_datetime`, `valid_end_datetime`, `status`, `creator_uuid`, `create_datetime`) values (#{uuid}, #{parent_uuid}, #{cluster_list}, #{enterprise_name}, #{code}, #{address}, #{valid_start_datetime}, #{valid_end_datetime}, #{status}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteInstitutionalCreditCode" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `certificate_institutional-credit-code`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateInstitutionalCreditCode" parameterType = "java.util.HashMap">
+                <![CDATA[update `certificate_institutional-credit-code`]]>
+                <set>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[`enterprise_name` = #{enterprise_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_enterprise_name">
+                                <![CDATA[`enterprise_name` = null,]]>
+                        </if>
+                        <if test = "null != code">
+                                <![CDATA[`code` = #{code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_code">
+                                <![CDATA[`code` = null,]]>
+                        </if>
+                        <if test = "null != address">
+                                <![CDATA[`address` = #{address},]]>
+                        </if>
+                        <if test = "'set_null' == sn_address">
+                                <![CDATA[`address` = null,]]>
+                        </if>
+                        <if test = "null != valid_start_datetime">
+                                <![CDATA[`valid_start_datetime` = #{valid_start_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_valid_start_datetime">
+                                <![CDATA[`valid_start_datetime` = null,]]>
+                        </if>
+                        <if test = "null != valid_end_datetime">
+                                <![CDATA[`valid_end_datetime` = #{valid_end_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_valid_end_datetime">
+                                <![CDATA[`valid_end_datetime` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectInstitutionalCreditCode" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `certificate_institutional-credit-code`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[and `cluster_list` = #{cluster_list}]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[and `enterprise_name` = #{enterprise_name}]]>
+                        </if>
+                        <if test = "null != enterprise_name_fuzzy">
+                                <![CDATA[and `enterprise_name` like CONCAT('%',#{enterprise_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 开票信息[certificate_invoice-information] -->
+        <insert id = "insertInvoiceInformation" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `certificate_invoice-information` (`uuid`, `parent_uuid`, `cluster_list`, `enterprise_name`, `tax_identification_number`, `address`, `telephone_number`, `bank_name`, `account`, `status`, `creator_uuid`, `create_datetime`) values (#{uuid}, #{parent_uuid}, #{cluster_list}, #{enterprise_name}, #{tax_identification_number}, #{address}, #{telephone_number}, #{bank_name}, #{account}, #{status}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteInvoiceInformation" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `certificate_invoice-information`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateInvoiceInformation" parameterType = "java.util.HashMap">
+                <![CDATA[update `certificate_invoice-information`]]>
+                <set>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[`enterprise_name` = #{enterprise_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_enterprise_name">
+                                <![CDATA[`enterprise_name` = null,]]>
+                        </if>
+                        <if test = "null != tax_identification_number">
+                                <![CDATA[`tax_identification_number` = #{tax_identification_number},]]>
+                        </if>
+                        <if test = "'set_null' == sn_tax_identification_number">
+                                <![CDATA[`tax_identification_number` = null,]]>
+                        </if>
+                        <if test = "null != address">
+                                <![CDATA[`address` = #{address},]]>
+                        </if>
+                        <if test = "'set_null' == sn_address">
+                                <![CDATA[`address` = null,]]>
+                        </if>
+                        <if test = "null != telephone_number">
+                                <![CDATA[`telephone_number` = #{telephone_number},]]>
+                        </if>
+                        <if test = "'set_null' == sn_telephone_number">
+                                <![CDATA[`telephone_number` = null,]]>
+                        </if>
+                        <if test = "null != bank_name">
+                                <![CDATA[`bank_name` = #{bank_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_bank_name">
+                                <![CDATA[`bank_name` = null,]]>
+                        </if>
+                        <if test = "null != account">
+                                <![CDATA[`account` = #{account},]]>
+                        </if>
+                        <if test = "'set_null' == sn_account">
+                                <![CDATA[`account` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectInvoiceInformation" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `certificate_invoice-information`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[and `cluster_list` = #{cluster_list}]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[and `enterprise_name` = #{enterprise_name}]]>
+                        </if>
+                        <if test = "null != enterprise_name_fuzzy">
+                                <![CDATA[and `enterprise_name` like CONCAT('%',#{enterprise_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 机构安全生产许可证[certificate_safety-production-license] -->
+        <insert id = "insertSafetyProductionLicense" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `certificate_safety-production-license` (`uuid`, `parent_uuid`, `cluster_list`, `enterprise_name`, `responsible_person_name`, `address`, `economic_type`, `permit_scope`, `valid_start_datetime`, `valid_end_datetime`, `status`, `creator_uuid`, `create_datetime`) values (#{uuid}, #{parent_uuid}, #{cluster_list}, #{enterprise_name}, #{responsible_person_name}, #{address}, #{economic_type}, #{permit_scope}, #{valid_start_datetime}, #{valid_end_datetime}, #{status}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteSafetyProductionLicense" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `certificate_safety-production-license`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateSafetyProductionLicense" parameterType = "java.util.HashMap">
+                <![CDATA[update `certificate_safety-production-license`]]>
+                <set>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[`enterprise_name` = #{enterprise_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_enterprise_name">
+                                <![CDATA[`enterprise_name` = null,]]>
+                        </if>
+                        <if test = "null != responsible_person_name">
+                                <![CDATA[`responsible_person_name` = #{responsible_person_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_responsible_person_name">
+                                <![CDATA[`responsible_person_name` = null,]]>
+                        </if>
+                        <if test = "null != address">
+                                <![CDATA[`address` = #{address},]]>
+                        </if>
+                        <if test = "'set_null' == sn_address">
+                                <![CDATA[`address` = null,]]>
+                        </if>
+                        <if test = "null != economic_type">
+                                <![CDATA[`economic_type` = #{economic_type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_economic_type">
+                                <![CDATA[`economic_type` = null,]]>
+                        </if>
+                        <if test = "null != permit_scope">
+                                <![CDATA[`permit_scope` = #{permit_scope},]]>
+                        </if>
+                        <if test = "'set_null' == sn_permit_scope">
+                                <![CDATA[`permit_scope` = null,]]>
+                        </if>
+                        <if test = "null != valid_start_datetime">
+                                <![CDATA[`valid_start_datetime` = #{valid_start_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_valid_start_datetime">
+                                <![CDATA[`valid_start_datetime` = null,]]>
+                        </if>
+                        <if test = "null != valid_end_datetime">
+                                <![CDATA[`valid_end_datetime` = #{valid_end_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_valid_end_datetime">
+                                <![CDATA[`valid_end_datetime` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectSafetyProductionLicense" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `certificate_safety-production-license`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[and `cluster_list` = #{cluster_list}]]>
+                        </if>
+                        <if test = "null != enterprise_name">
+                                <![CDATA[and `enterprise_name` = #{enterprise_name}]]>
+                        </if>
+                        <if test = "null != enterprise_name_fuzzy">
+                                <![CDATA[and `enterprise_name` like CONCAT('%',#{enterprise_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

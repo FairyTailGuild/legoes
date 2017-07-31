@@ -1,0 +1,226 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_storage">
+        <!-- [storage_cluster] -->
+        <insert id = "insertCluster" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `storage_cluster` (`uuid`, `name`, `suffix`, `create_datetime`, `expire_datetime`) values (#{uuid}, #{name}, #{suffix}, now(), #{expire_datetime})]]>
+        </insert>
+        <delete id = "deleteCluster" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `storage_cluster`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateCluster" parameterType = "java.util.HashMap">
+                <![CDATA[update `storage_cluster`]]>
+                <set>
+                        <if test = "null != expire_datetime">
+                                <![CDATA[`expire_datetime` = #{expire_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_expire_datetime">
+                                <![CDATA[`expire_datetime` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectCluster" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `storage_cluster`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != suffix">
+                                <![CDATA[and `suffix` = #{suffix}]]>
+                        </if>
+                        <if test = "null != underExpireDatetime">
+                                <![CDATA[and `expire_datetime` <= #{underExpireDatetime}]]>
+                        </if>
+                </where>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- [storage_directory] -->
+        <insert id = "insertDirectory" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `storage_directory` (`uuid`, `parent_uuid`, `name`, `description`, `creator_uuid`, `create_datetime`) values (#{uuid}, #{parent_uuid}, #{name}, #{description}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteDirectory" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `storage_directory`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateDirectory" parameterType = "java.util.HashMap">
+                <![CDATA[update `storage_directory`]]>
+                <set>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[`parent_uuid` = #{parent_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_parent_uuid">
+                                <![CDATA[`parent_uuid` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectDirectory" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `storage_directory`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+                <if test = "null != orderByField and null != orderByType">
+                        <![CDATA[ order by #{orderByField} #{orderByType}]]>
+                </if>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- [storage_file] -->
+        <insert id = "insertFile" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `storage_file` (`uuid`, `directory_uuid`, `name`, `cluster_name`, `suffix`, `file_size`, `creator_uuid`, `create_datetime`, `status`) values (#{uuid}, #{directory_uuid}, #{name}, #{cluster_name}, #{suffix}, #{file_size}, #{creator_uuid}, now(), 1)]]>
+        </insert>
+        <delete id = "deleteFile" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `storage_file`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != directory_uuid">
+                                <![CDATA[and `directory_uuid` = #{directory_uuid}]]>
+                        </if>
+                        <if test = "null != cluster_name">
+                                <![CDATA[and `cluster_name` = #{cluster_name}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateFile" parameterType = "java.util.HashMap">
+                <![CDATA[update `storage_file`]]>
+                <set>
+                        <if test = "null != directory_uuid">
+                                <![CDATA[`directory_uuid` = #{directory_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_directory_uuid">
+                                <![CDATA[`directory_uuid` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != cluster_name">
+                                <![CDATA[and `cluster_name` = #{cluster_name}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectFile" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `storage_file`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != directory_uuid">
+                                <![CDATA[and `directory_uuid` = #{directory_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != cluster_name">
+                                <![CDATA[and `cluster_name` = #{cluster_name}]]>
+                        </if>
+                        <if test = "null != ne_cluster_name">
+                                <![CDATA[and `cluster_name` != #{ne_cluster_name}]]>
+                        </if>
+                        <if test = "null != suffix">
+                                <![CDATA[and `suffix` = #{suffix}]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+                <if test = "null != orderByField and null != orderByType">
+                        <![CDATA[ order by #{orderByField} #{orderByType}]]>
+                </if>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

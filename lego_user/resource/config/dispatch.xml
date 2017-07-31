@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+        <dispatch>
+                <servlet>
+                        <!-- 名称: 添加用户 -->
+                        <servletName>addUserSecurityWithNamePassword</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查用户名称是否重名 -->
+                                non-select,selectUserSecurity:name;
+                                <!-- 添加数据 -->
+                                insert,insertUserSecurity:uuid,name,password,role,failedRetryCount,status;
+                                <!-- 获取数据 -->
+                                select,selectUserSecurity:uuid
+                        </namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户名（4-16位下划线、横线、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z_-]{4,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 密码（1-16位非空白符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^\S{1,16}$</format>
+                                        <transform>#encrypt_md5</transform>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户角色（默认为user） -->
+                                        <name>role</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>user</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 失败重试计数（默认为0） -->
+                                        <name>failedRetryCount</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正常 2:冻结 3:锁定） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加用户 -->
+                        <servletName>addUserSecurityWithNameEmailPassword</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查用户名称是否重名 -->
+                                non-select,selectUserSecurity:name;
+                                <!-- 检查Email是否重名 -->
+                                non-select,selectUserSecurity:email;
+                                <!-- 添加数据 -->
+                                insert,insertUserSecurity:uuid,name,email,password,role,failedRetryCount,status;
+                                <!-- 获取数据 -->
+                                select,selectUserSecurity:uuid
+                        </namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户名（4-16位下划线、横线、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z_-]{4,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- Email（Email通用格式） -->
+                                        <name>email</name>
+                                        <type>string</type>
+                                        <format>^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 密码（1-16位非空白符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^\S{1,16}$</format>
+                                        <transform>#encrypt_md5</transform>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户角色（默认为user） -->
+                                        <name>role</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>user</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 失败重试计数（默认为0） -->
+                                        <name>failedRetryCount</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正常 2:冻结 3:锁定） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除用户 -->
+                        <servletName>removeUserSecurity</servletName>
+                        <sdboType>delete</sdboType>
+                        <namespace>deleteUserSecurity</namespace>
+                        <permission>user_removeUserSecurity</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 用户的uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改用户密码（所属用户） -->
+                        <servletName>modifyUserSecurityWithPasswordByUser</servletName>
+                        <sdboType>update</sdboType>
+                        <namespace>updateUserSecurity</namespace>
+                        <permission>user_modifyUserSecurityWithPasswordByUser</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 密码（1-16位非空白符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^\S{1,16}$</format>
+                                        <transform>#encrypt_md5</transform>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改用户密码（管理员） -->
+                        <servletName>modifyUserSecurityWithPasswordByManager</servletName>
+                        <sdboType>update</sdboType>
+                        <namespace>updateUserSecurity</namespace>
+                        <permission>user_modifyUserSecurityWithPasswordByManager</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 用户的uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 密码（1-16位非空白符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^\S{1,16}$</format>
+                                        <transform>#encrypt_md5</transform>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 用户名和密码登录 -->
+                        <servletName>loginWithNamePassword</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_loginWithSecurityKeyPassword</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 安全key（用户名登录为“name”、手机号登录为“telephone_number”、Email登录为“email”） -->
+                                        <name>securityKey</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>name</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户名（4-16位下划线、横线、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z_-]{4,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 密码（1-16位非空白符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^\S{1,16}$</format>
+                                        <transform>#encrypt_md5</transform>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: Email和密码登录 -->
+                        <servletName>loginWithEmailPassword</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_loginWithSecurityKeyPassword</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 安全key（用户名登录为“name”、手机号登录为“telephone_number”、Email登录为“email”） -->
+                                        <name>securityKey</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>email</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- Email（Email通用格式） -->
+                                        <name>email</name>
+                                        <type>string</type>
+                                        <format>^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 密码（1-16位非空白符） -->
+                                        <name>password</name>
+                                        <type>string</type>
+                                        <format>^\S{1,16}$</format>
+                                        <transform>#encrypt_md5</transform>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 退出 -->
+                        <servletName>logout</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_logout</namespace>
+                        <permission>none</permission>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查用户名是否存在 -->
+                        <servletName>checkNameExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectUserSecurity:name</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 用户名（4-16位下划线、横线、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z_-]{4,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查Email是否存在 -->
+                        <servletName>checkEmailExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>select,selectUserSecurity:email</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- Email（Email通用格式） -->
+                                        <name>email</name>
+                                        <type>string</type>
+                                        <format>^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取用户安全信息（所属用户） -->
+                        <servletName>getUserSecurityByUser</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectUserSecurity</namespace>
+                        <permission>user_getUserSecurityByUser</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 用户uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取用户安全信息（管理员） -->
+                        <servletName>getUserSecurityByManager</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectUserSecurity</namespace>
+                        <permission>user_getUserSecurityByManager</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+        </dispatch>
+</config>

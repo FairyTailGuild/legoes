@@ -1,0 +1,508 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_workflow">
+        <!-- 部门[workflow_department] -->
+        <insert id = "insertDepartment" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `workflow_department` (`uuid`, `parent_uuid`, `name`, `description`, `order_offset`) values (#{uuid}, #{parent_uuid}, #{name}, #{description}, #{order_offset})]]>
+        </insert>
+        <delete id = "deleteDepartment" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `workflow_department`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateDepartment" parameterType = "java.util.HashMap">
+                <![CDATA[update `workflow_department`]]>
+                <set>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[`parent_uuid` = #{parent_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_parent_uuid">
+                                <![CDATA[`parent_uuid` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                        <if test = "null != order_offset">
+                                <![CDATA[`order_offset` = #{order_offset},]]>
+                        </if>
+                        <if test = "'set_null' == sn_order_offset">
+                                <![CDATA[`order_offset` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectDepartment" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `workflow_department`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `order_offset`]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 角色[workflow_position] -->
+        <insert id = "insertPosition" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `workflow_position` (`uuid`, `department_uuid`, `name`, `description`, `order_offset`) values (#{uuid}, #{department_uuid}, #{name}, #{description}, #{order_offset})]]>
+        </insert>
+        <delete id = "deletePosition" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `workflow_position`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != department_uuid">
+                                <![CDATA[and `department_uuid` = #{department_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updatePosition" parameterType = "java.util.HashMap">
+                <![CDATA[update `workflow_position`]]>
+                <set>
+                        <if test = "null != department_uuid">
+                                <![CDATA[`department_uuid` = #{department_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_department_uuid">
+                                <![CDATA[`department_uuid` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                        <if test = "null != order_offset">
+                                <![CDATA[`order_offset` = #{order_offset},]]>
+                        </if>
+                        <if test = "'set_null' == sn_order_offset">
+                                <![CDATA[`order_offset` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectPosition" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `workflow_position`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != department_uuid">
+                                <![CDATA[and `department_uuid` = #{department_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `order_offset`]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 员工信息[workflow_employee] -->
+        <insert id = "insertEmployee" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `workflow_employee` (`uuid`, `user_uuid`, `name`, `sex`, `telephone_number`, `email`, `position_uuid`, `work_area_uuid`, `order_offset`) values (#{uuid}, #{user_uuid}, #{name}, #{sex}, #{telephone_number}, #{email}, #{position_uuid}, #{work_area_uuid}, #{order_offset})]]>
+        </insert>
+        <delete id = "deleteEmployee" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `workflow_employee`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != user_uuid">
+                                <![CDATA[and `user_uuid` = #{user_uuid}]]>
+                        </if>
+                        <if test = "null != position_uuid">
+                                <![CDATA[and `position_uuid` = #{position_uuid}]]>
+                        </if>
+                        <if test = "null != work_area_uuid">
+                                <![CDATA[and `work_area_uuid` = #{work_area_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateEmployee" parameterType = "java.util.HashMap">
+                <![CDATA[update `workflow_employee`]]>
+                <set>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != sex">
+                                <![CDATA[`sex` = #{sex},]]>
+                        </if>
+                        <if test = "'set_null' == sn_sex">
+                                <![CDATA[`sex` = null,]]>
+                        </if>
+                        <if test = "null != telephone_number">
+                                <![CDATA[`telephone_number` = #{telephone_number},]]>
+                        </if>
+                        <if test = "'set_null' == sn_telephone_number">
+                                <![CDATA[`telephone_number` = null,]]>
+                        </if>
+                        <if test = "null != email">
+                                <![CDATA[`email` = #{email},]]>
+                        </if>
+                        <if test = "'set_null' == sn_email">
+                                <![CDATA[`email` = null,]]>
+                        </if>
+                        <if test = "null != position_uuid">
+                                <![CDATA[`position_uuid` = #{position_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_position_uuid">
+                                <![CDATA[`position_uuid` = null,]]>
+                        </if>
+                        <if test = "null != work_area_uuid">
+                                <![CDATA[`work_area_uuid` = #{work_area_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_work_area_uuid">
+                                <![CDATA[`work_area_uuid` = null,]]>
+                        </if>
+                        <if test = "null != order_offset">
+                                <![CDATA[`order_offset` = #{order_offset},]]>
+                        </if>
+                        <if test = "'set_null' == sn_order_offset">
+                                <![CDATA[`order_offset` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != user_uuid">
+                                <![CDATA[and `user_uuid` = #{user_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectEmployee" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `workflow_employee`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != user_uuid">
+                                <![CDATA[and `user_uuid` = #{user_uuid}]]>
+                        </if>
+                        <if test = "null != sex">
+                                <![CDATA[and `sex` = #{sex}]]>
+                        </if>
+                        <if test = "null != position_uuid">
+                                <![CDATA[and `position_uuid` = #{position_uuid}]]>
+                        </if>
+                        <if test = "null != work_area_uuid">
+                                <![CDATA[and `work_area_uuid` = #{work_area_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `order_offset`]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 流程[workflow_process] -->
+        <insert id = "insertProcess" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `workflow_process` (`department_uuid`, `icon`, `name`, `description`, `content`, `position_list`, `cc_list`, `status`) values (#{department_uuid}, #{icon}, #{name}, #{description}, #{content}, #{position_list}, #{cc_list}, #{status})]]>
+        </insert>
+        <delete id = "deleteProcess" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `workflow_process`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != department_uuid">
+                                <![CDATA[and `department_uuid` = #{department_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateProcess" parameterType = "java.util.HashMap">
+                <![CDATA[update `workflow_process`]]>
+                <set>
+                        <if test = "null != department_uuid">
+                                <![CDATA[`department_uuid` = #{department_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_department_uuid">
+                                <![CDATA[`department_uuid` = null,]]>
+                        </if>
+                        <if test = "null != icon">
+                                <![CDATA[`icon` = #{icon},]]>
+                        </if>
+                        <if test = "'set_null' == sn_icon">
+                                <![CDATA[`icon` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                        <if test = "null != content">
+                                <![CDATA[`content` = #{content},]]>
+                        </if>
+                        <if test = "'set_null' == sn_content">
+                                <![CDATA[`content` = null,]]>
+                        </if>
+                        <if test = "null != position_list">
+                                <![CDATA[`position_list` = #{position_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_position_list">
+                                <![CDATA[`position_list` = null,]]>
+                        </if>
+                        <if test = "null != cc_list">
+                                <![CDATA[`cc_list` = #{cc_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cc_list">
+                                <![CDATA[`cc_list` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectProcess" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `workflow_process`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != department_uuid">
+                                <![CDATA[and `department_uuid` = #{department_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 作业[workflow_task] -->
+        <insert id = "insertTask" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `workflow_task` (`uuid`, `process_uuid`, `content`, `cluster_list`, `position_offset`, `cc_list`, `creator_uuid`, `create_datetime`, `status`) values (#{uuid}, #{process_uuid}, #{content}, #{cluster_list}, #{position_offset}, #{cc_list}, #{creator_uuid}, now(), #{status})]]>
+        </insert>
+        <delete id = "deleteTask" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `workflow_task`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != process_uuid">
+                                <![CDATA[and `process_uuid` = #{process_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateTask" parameterType = "java.util.HashMap">
+                <![CDATA[update `workflow_task`]]>
+                <set>
+                        <if test = "null != process_uuid">
+                                <![CDATA[`process_uuid` = #{process_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_process_uuid">
+                                <![CDATA[`process_uuid` = null,]]>
+                        </if>
+                        <if test = "null != content">
+                                <![CDATA[`content` = #{content},]]>
+                        </if>
+                        <if test = "'set_null' == sn_content">
+                                <![CDATA[`content` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != position_offset">
+                                <![CDATA[`position_offset` = #{position_offset},]]>
+                        </if>
+                        <if test = "'set_null' == sn_position_offset">
+                                <![CDATA[`position_offset` = null,]]>
+                        </if>
+                        <if test = "null != cc_list">
+                                <![CDATA[`cc_list` = #{cc_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cc_list">
+                                <![CDATA[`cc_list` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectTask" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `workflow_task`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != process_uuid">
+                                <![CDATA[and `process_uuid` = #{process_uuid}]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                        <if test = "null != ne_status">
+                                <![CDATA[and `status` != #{ne_status}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 记录[workflow_record] -->
+        <insert id = "insertRecord" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `workflow_record` (`task_uuid`, `result`, `suggestion`, `creator_uuid`, `create_datetime`) values (#{task_uuid}, #{result}, #{suggestion}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteRecord" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `workflow_record`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != task_uuid">
+                                <![CDATA[and `task_uuid` = #{task_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateRecord" parameterType = "java.util.HashMap">
+                <![CDATA[update `workflow_record`]]>
+                <set>
+                        <if test = "null != task_uuid">
+                                <![CDATA[`task_uuid` = #{task_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_task_uuid">
+                                <![CDATA[`task_uuid` = null,]]>
+                        </if>
+                        <if test = "null != result">
+                                <![CDATA[`result` = #{result},]]>
+                        </if>
+                        <if test = "'set_null' == sn_result">
+                                <![CDATA[`result` = null,]]>
+                        </if>
+                        <if test = "null != suggestion">
+                                <![CDATA[`suggestion` = #{suggestion},]]>
+                        </if>
+                        <if test = "'set_null' == sn_suggestion">
+                                <![CDATA[`suggestion` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectRecord" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `workflow_record`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != task_uuid">
+                                <![CDATA[and `task_uuid` = #{task_uuid}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 内容控件[workflow_content_control] -->
+        <select id = "selectContentControl" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `workflow_content_control`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                </where>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

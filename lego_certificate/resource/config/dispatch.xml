@@ -1,0 +1,2510 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+        <dispatch>
+                <servlet>
+                        <!-- 名称: 添加开户许可证 -->
+                        <servletName>addAccountOpeningPermit</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                non-select,selectAccountOpeningPermit:parent_uuid;
+                                <!-- 检查附件的合法性 -->
+                                custom,@lego_storage.Custom.t_checkFilesExist:directory_uuid,cluster_list,file_status->status,creator_uuid;
+                                <!-- 添加数据 -->
+                                insert,insertAccountOpeningPermit:uuid,parent_uuid,cluster_list,enterprise_name,legal_representative,bank_name,account,status,creator_uuid;
+                                <!-- 保存附件为永久性文件 -->
+                                custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
+                        </namespace>
+                        <permission>certificate_addAccountOpeningPermit</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 法人代表（2-16个汉字） -->
+                                        <name>legal_representative</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 开户银行（8-64个汉字） -->
+                                        <name>bank_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{8,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 银行账户（10-30个数字） -->
+                                        <name>account</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{10,30}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除开户许可证 -->
+                        <servletName>removeAccountOpeningPermit</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 删除附件 -->
+                                custom,@lego_storage.Custom.t_removeAttachment:idColumnName,idColumnValue,selectNamespace,clusterListColumnName;
+                                <!-- 删除数据 -->
+                                delete,deleteAccountOpeningPermit:idColumnValue->uuid,parent_uuid
+                        </namespace>
+                        <permission>certificate_removeAccountOpeningPermit</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectAccountOpeningPermit</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改开户许可证 -->
+                        <servletName>modifyAccountOpeningPermit</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                select,selectAccountOpeningPermit:parent_uuid;
+                                <!-- 编辑附件 -->
+                                custom,@lego_storage.Custom.t_modifyAttachment:idColumnName,idColumnValue,selectNamespace,updateNamespace,clusterListColumnName,newClusterList,directory_uuid,file_status->status;
+                                <!-- 修改数据 -->
+                                update,updateAccountOpeningPermit:idColumnValue->uuid,parent_uuid,enterprise_name,legal_representative,bank_name,account,status
+                        </namespace>
+                        <permission>certificate_modifyAccountOpeningPermit</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectAccountOpeningPermit</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.updateAccountOpeningPermit</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 法人代表（2-16个汉字） -->
+                                        <name>legal_representative</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 开户银行（8-64个汉字） -->
+                                        <name>bank_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{8,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 银行账户（10-30个数字） -->
+                                        <name>account</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{10,30}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <!-- 只要修改数据，状态就变为“未审核” -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取开户许可证 -->
+                        <servletName>getAccountOpeningPermit</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectAccountOpeningPermit</namespace>
+                        <permission>certificate_getAccountOpeningPermit</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（模糊查询）（1-32个汉字） -->
+                                        <name>enterprise_name_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{1,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[012]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加营业执照 -->
+                        <servletName>addBusinessLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                non-select,selectBusinessLicense:parent_uuid;
+                                <!-- 检查附件的合法性 -->
+                                custom,@lego_storage.Custom.t_checkFilesExist:directory_uuid,cluster_list,file_status->status,creator_uuid;
+                                <!-- 添加数据 -->
+                                insert,insertBusinessLicense:uuid,parent_uuid,cluster_list,enterprise_name,license_number,address,legal_representative,registered_capital,enterprise_type,business_scope,business_term_start_datetime,business_term_end_datetime,status,creator_uuid;
+                                <!-- 保存附件为永久性文件 -->
+                                custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
+                        </namespace>
+                        <permission>certificate_addBusinessLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 许可号（10-30个数字） -->
+                                        <name>license_number</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{10,30}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 法人代表（2-16个汉字） -->
+                                        <name>legal_representative</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 注册资本（单位：万元）（小数点左边1-10个正数，小数点右边1-10个正数） -->
+                                        <name>registered_capital</name>
+                                        <type>double</type>
+                                        <format>^([0-9]{1,10}+)(\.[0-9]{1,10}+)?$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业类型（“国有全资”、“集体全资”、“股份合作”、“联营”、“有限责任（公司）”、“其他有限责任（公司）”、“股份有限（公司）”、“私有”、“其他内资”、“港、澳、台投资”、“国外投资”或“其他”） -->
+                                        <name>enterprise_type</name>
+                                        <type>string</type>
+                                        <format>^(国有全资|集体全资|股份合作|联营|有限责任（公司）|其他有限责任（公司）|股份有限（公司）|私有|其他内资|港、澳、台投资|国外投资|其他)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 经营范围（4-1024个汉字、字符或数字） -->
+                                        <name>business_scope</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{4,1024}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 营业期限开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>business_term_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 营业期限结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>business_term_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除营业执照 -->
+                        <servletName>removeBusinessLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 删除附件 -->
+                                custom,@lego_storage.Custom.t_removeAttachment:idColumnName,idColumnValue,selectNamespace,clusterListColumnName;
+                                <!-- 删除数据 -->
+                                delete,deleteBusinessLicense:idColumnValue->uuid,parent_uuid
+                        </namespace>
+                        <permission>certificate_removeBusinessLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改营业执照 -->
+                        <servletName>modifyBusinessLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                select,selectBusinessLicense:parent_uuid;
+                                <!-- 编辑附件 -->
+                                custom,@lego_storage.Custom.t_modifyAttachment:idColumnName,idColumnValue,selectNamespace,updateNamespace,clusterListColumnName,newClusterList,directory_uuid,file_status->status;
+                                <!-- 修改数据 -->
+                                update,updateBusinessLicense:idColumnValue->uuid,parent_uuid,enterprise_name,license_number,address,legal_representative,registered_capital,enterprise_type,business_scope,business_term_start_datetime,business_term_end_datetime,status
+                        </namespace>
+                        <permission>certificate_modifyBusinessLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.updateBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 许可号（10-30个数字） -->
+                                        <name>license_number</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{10,30}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 法人代表（2-16个汉字） -->
+                                        <name>legal_representative</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 注册资本（单位：万元）（小数点左边1-10个正数，小数点右边1-10个正数） -->
+                                        <name>registered_capital</name>
+                                        <type>double</type>
+                                        <format>^([0-9]{1,10}+)(\.[0-9]{1,10}+)?$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业类型（“国有全资”、“集体全资”、“股份合作”、“联营”、“有限责任（公司）”、“其他有限责任（公司）”、“股份有限（公司）”、“私有”、“其他内资”、“港、澳、台投资”、“国外投资”或“其他”） -->
+                                        <name>enterprise_type</name>
+                                        <type>string</type>
+                                        <format>^(国有全资|集体全资|股份合作|联营|有限责任（公司）|其他有限责任（公司）|股份有限（公司）|私有|其他内资|港、澳、台投资|国外投资|其他)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 经营范围（4-1024个汉字、字符或数字） -->
+                                        <name>business_scope</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{4,1024}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 营业期限开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>business_term_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 营业期限结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>business_term_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <!-- 只要修改数据，状态就变为“未审核” -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取营业执照 -->
+                        <servletName>getBusinessLicense</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectBusinessLicense</namespace>
+                        <permission>certificate_getBusinessLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（模糊查询）（1-32个汉字） -->
+                                        <name>enterprise_name_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{1,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加危险化学品经营许可证 -->
+                        <servletName>addHazardousChemicalsBusinessLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                non-select,selectHazardousChemicalsBusinessLicense:parent_uuid;
+                                <!-- 检查附件的合法性 -->
+                                custom,@lego_storage.Custom.t_checkFilesExist:directory_uuid,cluster_list,file_status->status,creator_uuid;
+                                <!-- 添加数据 -->
+                                insert,insertHazardousChemicalsBusinessLicense:uuid,parent_uuid,cluster_list,enterprise_name,address,legal_representative,business_type,permit_scope,valid_start_datetime,valid_end_datetime,status,creator_uuid;
+                                <!-- 保存附件为永久性文件 -->
+                                custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
+                        </namespace>
+                        <permission>certificate_addHazardousChemicalsBusinessLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 法人代表（2-16个汉字） -->
+                                        <name>legal_representative</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 经营方式（“自产自销”、“代购代销”、“批发”、“零售”、“运输业”或“咨询服务”） -->
+                                        <name>business_type</name>
+                                        <type>string</type>
+                                        <format>^(自产自销|代购代销|批发|零售|运输业|咨询服务)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 许可范围（4-1024个汉字、字符或数字） -->
+                                        <name>permit_scope</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{4,1024}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除危险化学品经营许可证 -->
+                        <servletName>removeHazardousChemicalsBusinessLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 删除附件 -->
+                                custom,@lego_storage.Custom.t_removeAttachment:idColumnName,idColumnValue,selectNamespace,clusterListColumnName;
+                                <!-- 删除数据 -->
+                                delete,deleteHazardousChemicalsBusinessLicense:idColumnValue->uuid,parent_uuid
+                        </namespace>
+                        <permission>certificate_removeHazardousChemicalsBusinessLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectHazardousChemicalsBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改危险化学品经营许可证 -->
+                        <servletName>modifyHazardousChemicalsBusinessLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                select,selectHazardousChemicalsBusinessLicense:parent_uuid;
+                                <!-- 编辑附件 -->
+                                custom,@lego_storage.Custom.t_modifyAttachment:idColumnName,idColumnValue,selectNamespace,updateNamespace,clusterListColumnName,newClusterList,directory_uuid,file_status->status;
+                                <!-- 修改数据 -->
+                                update,updateHazardousChemicalsBusinessLicense:idColumnValue->uuid,parent_uuid,enterprise_name,license_number,address,legal_representative,registered_capital,enterprise_type,business_scope,business_term_start_datetime,business_term_end_datetime,status
+                        </namespace>
+                        <permission>certificate_modifyHazardousChemicalsBusinessLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectHazardousChemicalsBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.updateHazardousChemicalsBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 法人代表（2-16个汉字） -->
+                                        <name>legal_representative</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 经营方式（“自产自销”、“代购代销”、“批发”、“零售”、“运输业”或“咨询服务”） -->
+                                        <name>business_type</name>
+                                        <type>string</type>
+                                        <format>^(自产自销|代购代销|批发|零售|运输业|咨询服务)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 许可范围（4-1024个汉字、字符或数字） -->
+                                        <name>permit_scope</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{4,1024}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <!-- 只要修改数据，状态就变为“未审核” -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取危险化学品经营许可证 -->
+                        <servletName>getHazardousChemicalsBusinessLicense</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectHazardousChemicalsBusinessLicense</namespace>
+                        <permission>certificate_getHazardousChemicalsBusinessLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（模糊查询）（1-32个汉字） -->
+                                        <name>enterprise_name_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{1,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加身份证 -->
+                        <servletName>addIdCard</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                non-select,selectIdCard:parent_uuid;
+                                <!-- 检查附件的合法性 -->
+                                custom,@lego_storage.Custom.t_checkFilesExist:directory_uuid,cluster_list,file_status->status,creator_uuid;
+                                <!-- 添加数据 -->
+                                insert,insertIdCard:uuid,parent_uuid,cluster_list,real_name,sex,birthday,address,number,valid_start_datetime,valid_end_datetime,status,creator_uuid;
+                                <!-- 保存附件为永久性文件 -->
+                                custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
+                        </namespace>
+                        <permission>certificate_addIdCard</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 真实姓名（2-16个汉字） -->
+                                        <name>real_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（“男”或“女”） -->
+                                        <name>sex</name>
+                                        <type>string</type>
+                                        <format>^(男|女)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 生日（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>birthday</name>
+                                        <type>string</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 身份证号码（15位或18位） -->
+                                        <name>number</name>
+                                        <type>string</type>
+                                        <format>^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除身份证 -->
+                        <servletName>removeIdCard</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 删除附件 -->
+                                custom,@lego_storage.Custom.t_removeAttachment:idColumnName,idColumnValue,selectNamespace,clusterListColumnName;
+                                <!-- 删除数据 -->
+                                delete,deleteIdCard:idColumnValue->uuid,parent_uuid
+                        </namespace>
+                        <permission>certificate_removeIdCard</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectIdCard</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改身份证 -->
+                        <servletName>modifyIdCard</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                select,selectIdCard:parent_uuid;
+                                <!-- 编辑附件 -->
+                                custom,@lego_storage.Custom.t_modifyAttachment:idColumnName,idColumnValue,selectNamespace,updateNamespace,clusterListColumnName,newClusterList,directory_uuid,file_status->status;
+                                <!-- 修改数据 -->
+                                update,updateIdCard:idColumnValue->uuid,parent_uuid,directory_uuid,real_name,sex,birthday,address,number,valid_start_datetime,valid_end_datetime,status
+                        </namespace>
+                        <permission>certificate_modifyIdCard</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectIdCard</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.updateIdCard</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- c文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 真实姓名（2-16个汉字） -->
+                                        <name>real_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 性别（“男”或“女”） -->
+                                        <name>sex</name>
+                                        <type>string</type>
+                                        <format>^(男|女)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 生日（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>birthday</name>
+                                        <type>string</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 身份证号码（15位或18位） -->
+                                        <name>number</name>
+                                        <type>string</type>
+                                        <format>^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <!-- 只要修改数据，状态就变为“未审核” -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取身份证 -->
+                        <servletName>getIdCard</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectIdCard</namespace>
+                        <permission>certificate_getIdCard</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 真实姓名（2-16个汉字） -->
+                                        <name>real_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 真实姓名（模糊查询）（1-16个汉字） -->
+                                        <name>real_name_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{1,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加机构信用代码证 -->
+                        <servletName>addInstitutionalCreditCode</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                non-select,selectInstitutionalCreditCode:parent_uuid;
+                                <!-- 检查附件的合法性 -->
+                                custom,@lego_storage.Custom.t_checkFilesExist:directory_uuid,cluster_list,file_status->status,creator_uuid;
+                                <!-- 添加数据 -->
+                                insert,insertInstitutionalCreditCode:uuid,parent_uuid,cluster_list,enterprise_name,code,address,valid_start_datetime,valid_end_datetime,status,creator_uuid;
+                                <!-- 保存附件为永久性文件 -->
+                                custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
+                        </namespace>
+                        <permission>certificate_addInstitutionalCreditCode</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 机构信用代码（18位数字或字母） -->
+                                        <name>code</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{18}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除机构信用代码证 -->
+                        <servletName>removeInstitutionalCreditCode</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 删除附件 -->
+                                custom,@lego_storage.Custom.t_removeAttachment:idColumnName,idColumnValue,selectNamespace,clusterListColumnName;
+                                <!-- 删除数据 -->
+                                delete,deleteInstitutionalCreditCode:idColumnValue->uuid,parent_uuid
+                        </namespace>
+                        <permission>certificate_removeInstitutionalCreditCode</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectInstitutionalCreditCode</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改机构信用代码证 -->
+                        <servletName>modifyInstitutionalCreditCode</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                select,selectInstitutionalCreditCode:parent_uuid;
+                                <!-- 编辑附件 -->
+                                custom,@lego_storage.Custom.t_modifyAttachment:idColumnName,idColumnValue,selectNamespace,updateNamespace,clusterListColumnName,newClusterList,directory_uuid,file_status->status;
+                                <!-- 修改数据 -->
+                                update,updateInstitutionalCreditCode:idColumnValue->uuid,parent_uuid,enterprise_name,code,address,valid_start_datetime,valid_end_datetime,status
+                        </namespace>
+                        <permission>certificate_modifyInstitutionalCreditCode</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectInstitutionalCreditCode</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.updateInstitutionalCreditCode</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 机构信用代码（18位数字或字母） -->
+                                        <name>code</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{18}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <!-- 只要修改数据，状态就变为“未审核” -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取机构信用代码证 -->
+                        <servletName>getInstitutionalCreditCode</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectInstitutionalCreditCode</namespace>
+                        <permission>certificate_getInstitutionalCreditCode</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（模糊查询）（1-32个汉字） -->
+                                        <name>enterprise_name_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{1,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加开票信息 -->
+                        <servletName>addInvoiceInformation</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                non-select,selectInvoiceInformation:parent_uuid;
+                                <!-- 检查附件的合法性 -->
+                                custom,@lego_storage.Custom.t_checkFilesExist:directory_uuid,cluster_list,file_status->status,creator_uuid;
+                                <!-- 添加数据 -->
+                                insert,insertInvoiceInformation:uuid,parent_uuid,cluster_list,enterprise_name,tax_identification_number,address,telephone_number,bank_name,account,status,creator_uuid;
+                                <!-- 保存附件为永久性文件 -->
+                                custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
+                        </namespace>
+                        <permission>certificate_addInvoiceInformation</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 纳税识别号（15-18位数字、字母） -->
+                                        <name>tax_identification_number</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{15,18}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 联系电话（6-15个数字） -->
+                                        <name>telephone_number</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{6,15}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 开户银行（8-64个汉字） -->
+                                        <name>bank_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{8,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 银行账户（10-30个数字） -->
+                                        <name>account</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{10,30}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除开票信息 -->
+                        <servletName>removeInvoiceInformation</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 删除附件 -->
+                                custom,@lego_storage.Custom.t_removeAttachment:idColumnName,idColumnValue,selectNamespace,clusterListColumnName;
+                                <!-- 删除数据 -->
+                                delete,deleteInvoiceInformation:idColumnValue->uuid,parent_uuid
+                        </namespace>
+                        <permission>certificate_removeInvoiceInformation</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectInvoiceInformation</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改开票信息 -->
+                        <servletName>modifyInvoiceInformation</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                select,selectInvoiceInformation:parent_uuid;
+                                <!-- 编辑附件 -->
+                                custom,@lego_storage.Custom.t_modifyAttachment:idColumnName,idColumnValue,selectNamespace,updateNamespace,clusterListColumnName,newClusterList,directory_uuid,file_status->status;
+                                <!-- 修改数据 -->
+                                update,updateInvoiceInformation:idColumnValue->uuid,parent_uuid,enterprise_name,tax_identification_number,address,telephone_number,bank_name,account,status
+                        </namespace>
+                        <permission>certificate_modifyInvoiceInformation</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectInvoiceInformation</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.updateInvoiceInformation</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 纳税识别号（15-18位数字、字母） -->
+                                        <name>tax_identification_number</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{15,18}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 联系电话（6-15个数字） -->
+                                        <name>telephone_number</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{6,15}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 开户银行（8-64个汉字） -->
+                                        <name>bank_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{8,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 银行账户（10-30个数字） -->
+                                        <name>account</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{10,30}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取开票信息 -->
+                        <servletName>getInvoiceInformation</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectInvoiceInformation</namespace>
+                        <permission>certificate_getInvoiceInformation</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（模糊查询）（1-32个汉字） -->
+                                        <name>enterprise_name_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加安全生产许可证 -->
+                        <servletName>addSafetyProductionLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                non-select,selectSafetyProductionLicense:parent_uuid;
+                                <!-- 检查附件的合法性 -->
+                                custom,@lego_storage.Custom.t_checkFilesExist:directory_uuid,cluster_list,file_status->status,creator_uuid;
+                                <!-- 添加数据 -->
+                                insert,insertSafetyProductionLicense:uuid,parent_uuid,cluster_list,enterprise_name,responsible_person_name,address,economic_type,permit_scope,valid_start_datetime,valid_end_datetime,status,creator_uuid;
+                                <!-- 保存附件为永久性文件 -->
+                                custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
+                        </namespace>
+                        <permission>certificate_addSafetyProductionLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 主要负责人（2-16个汉字） -->
+                                        <name>responsible_person_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 经济类型（“国有全资”、“集体全资”、“股份合作”、“联营”、“有限责任（公司）”、“其他有限责任（公司）”、“股份有限（公司）”、“私有”、“其他内资”、“港、澳、台投资”、“国外投资”或“其他”） -->
+                                        <name>economic_type</name>
+                                        <type>string</type>
+                                        <format>^(国有全资|集体全资|股份合作|联营|有限责任（公司）|其他有限责任（公司）|股份有限（公司）|私有|其他内资|港、澳、台投资|国外投资|其他)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 许可范围（4-1024个汉字、字符或数字） -->
+                                        <name>permit_scope</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{4,1024}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除安全生产许可证 -->
+                        <servletName>removeSafetyProductionLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 删除附件 -->
+                                custom,@lego_storage.Custom.t_removeAttachment:idColumnName,idColumnValue,selectNamespace,clusterListColumnName;
+                                <!-- 删除数据 -->
+                                delete,deleteSafetyProductionLicense:idColumnValue->uuid,parent_uuid
+                        </namespace>
+                        <permission>certificate_removeSafetyProductionLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectSafetyProductionLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改安全生产许可证 -->
+                        <servletName>modifySafetyProductionLicense</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查parent_uuid是否存在 -->
+                                select,selectSafetyProductionLicense:parent_uuid;
+                                <!-- 编辑附件 -->
+                                custom,@lego_storage.Custom.t_modifyAttachment:idColumnName,idColumnValue,selectNamespace,updateNamespace,clusterListColumnName,newClusterList,directory_uuid,file_status->status;
+                                <!-- 修改数据 -->
+                                update,updateSafetyProductionLicense:idColumnValue->uuid,parent_uuid,enterprise_name,responsible_person_name,address,economic_type,permit_scope,valid_start_datetime,valid_end_datetime,status
+                        </namespace>
+                        <permission>certificate_modifySafetyProductionLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectSafetyProductionLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.updateSafetyProductionLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 主要负责人（2-16个汉字） -->
+                                        <name>responsible_person_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 地址（8-100个汉字、字符或数字） -->
+                                        <name>address</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{8,100}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 经济类型（“国有全资”、“集体全资”、“股份合作”、“联营”、“有限责任（公司）”、“其他有限责任（公司）”、“股份有限（公司）”、“私有”、“其他内资”、“港、澳、台投资”、“国外投资”或“其他”） -->
+                                        <name>economic_type</name>
+                                        <type>string</type>
+                                        <format>^(国有全资|集体全资|股份合作|联营|有限责任（公司）|其他有限责任（公司）|股份有限（公司）|私有|其他内资|港、澳、台投资|国外投资|其他)$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 许可范围（4-1024个汉字、字符或数字） -->
+                                        <name>permit_scope</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{4,1024}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 有效期结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>valid_end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <!-- 只要修改数据，状态就变为“未审核” -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取安全生产许可证 -->
+                        <servletName>getSafetyProductionLicense</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectSafetyProductionLicense</namespace>
+                        <permission>certificate_getSafetyProductionLicense</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 所属父级的uuid -->
+                                        <name>parent_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（8-32个汉字） -->
+                                        <name>enterprise_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{8,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 企业名称（模糊查询）（1-32个汉字） -->
+                                        <name>enterprise_name_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa（）\(\)]{1,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+        </dispatch>
+</config>

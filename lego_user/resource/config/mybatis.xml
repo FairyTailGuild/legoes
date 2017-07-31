@@ -1,0 +1,183 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_user">
+        <!-- 用户安全[user_security] -->
+        <insert id = "insertUserSecurity" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `user_security` (`uuid`, `name`, `telephone_number`, `email`, `password`, `wechat_openid`, `role`, `failed_retry_count`, `frozen_datetime`, `status`) values (#{uuid}, #{name}, #{telephone_number}, #{email}, #{password}, #{wechat_openid}, #{role}, #{failed_retry_count}, #{frozen_datetime}, #{status})]]>
+        </insert>
+        <delete id = "deleteUserSecurity" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `user_security`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateUserSecurity" parameterType = "java.util.HashMap">
+                <![CDATA[update `user_security`]]>
+                <set>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != telephone_number">
+                                <![CDATA[`telephone_number` = #{telephone_number},]]>
+                        </if>
+                        <if test = "'set_null' == sn_telephone_number">
+                                <![CDATA[`telephone_number` = null,]]>
+                        </if>
+                        <if test = "null != email">
+                                <![CDATA[`email` = #{email},]]>
+                        </if>
+                        <if test = "'set_null' == sn_email">
+                                <![CDATA[`email` = null,]]>
+                        </if>
+                        <if test = "null != password">
+                                <![CDATA[`password` = #{password},]]>
+                        </if>
+                        <if test = "'set_null' == sn_password">
+                                <![CDATA[`password` = null,]]>
+                        </if>
+                        <if test = "null != wechat_openid">
+                                <![CDATA[`wechat_openid` = #{wechat_openid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_wechat_openid">
+                                <![CDATA[`wechat_openid` = null,]]>
+                        </if>
+                        <if test = "null != role">
+                                <![CDATA[`role` = #{role},]]>
+                        </if>
+                        <if test = "'set_null' == sn_role">
+                                <![CDATA[`role` = null,]]>
+                        </if>
+                        <if test = "null != failed_retry_count">
+                                <![CDATA[`failed_retry_count` = #{failed_retry_count},]]>
+                        </if>
+                        <if test = "'set_null' == sn_failed_retry_count">
+                                <![CDATA[`failed_retry_count` = null,]]>
+                        </if>
+                        <if test = "null != frozen_datetime">
+                                <![CDATA[`frozen_datetime` = #{frozen_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_frozen_datetime">
+                                <![CDATA[`frozen_datetime` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectUserSecurity" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `user_security`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != telephone_number">
+                                <![CDATA[and `telephone_number` = #{telephone_number}]]>
+                        </if>
+                        <if test = "null != email">
+                                <![CDATA[and `email` = #{email}]]>
+                        </if>
+                        <if test = "null != password">
+                                <![CDATA[and `password` = #{password}]]>
+                        </if>
+                        <if test = "null != wechat_openid">
+                                <![CDATA[and `wechat_openid` = #{wechat_openid}]]>
+                        </if>
+                        <if test = "null != role">
+                                <![CDATA[and `role` = #{role}]]>
+                        </if>
+                        <if test = "null != failed_retry_count">
+                                <![CDATA[and `failed_retry_count` = #{failed_retry_count}]]>
+                        </if>
+                        <if test = "null != frozen_datetime">
+                                <![CDATA[and `frozen_datetime` = #{frozen_datetime}]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 用户角色[user_role] -->
+        <insert id = "insertUserRole" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `user_role` (`uuid`, `name`, `description`, `permission_list`) values (#{uuid}, #{name}, #{description}, #{permission_list})]]>
+        </insert>
+        <delete id = "deleteUserRole" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `user_role`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateUserRole" parameterType = "java.util.HashMap">
+                <![CDATA[update `user_role`]]>
+                <set>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                        <if test = "null != permission_list">
+                                <![CDATA[`permission_list` = #{permission_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_permission_list">
+                                <![CDATA[`permission_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectUserRole" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `user_role`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != permission_list">
+                                <![CDATA[and `permission_list` = #{permission_list}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+        <dispatch>
+                <servlet>
+                        <!-- 名称: 获取中国区域_省、直辖市 -->
+                        <servletName>getProvince</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectProvince</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 省级代码（8位数字） -->
+                                        <name>code</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{8}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 名称（2-16个汉字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fff]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取中国区域_市 -->
+                        <servletName>getCity</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectCity</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 市级代码（8位数字） -->
+                                        <name>code</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{8}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 省级代码（8位数字） -->
+                                        <name>province_code</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{8}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 名称（2-16个汉字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fff]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取中国区域_区 -->
+                        <servletName>getDistrict</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectDistrict</namespace>
+                        <permission>none</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 区级代码（8位数字） -->
+                                        <name>code</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{8}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 市级代码（8位数字） -->
+                                        <name>city_code</name>
+                                        <type>string</type>
+                                        <format>^[0-9]{8}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 名称（2-16个汉字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fff]{2,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+        </dispatch>
+</config>

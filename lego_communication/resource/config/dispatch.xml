@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+        <dispatch>
+                <servlet>
+                        <!-- 名称: 添加消息 -->
+                        <servletName>addMessage</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_addMessage</namespace>
+                        <permission>communication_addMessage</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 上传目录（临时文件根目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 消息类型（1:个人消息 2:系统消息 3:工作流审批消息） -->
+                                        <name>message_type</name>
+                                        <type>integer</type>
+                                        <format>^[123]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 标题（1-128个任意字符） -->
+                                        <name>title</name>
+                                        <type>string</type>
+                                        <format>^.{1,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>string</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容类型（1:即时消息 2:邮件消息 3:语音消息 4:通知消息） -->
+                                        <name>content_type</name>
+                                        <type>integer</type>
+                                        <format>^[1234]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 发件人编号（大于等于0的数字） -->
+                                        <name>sender_id</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 收件人编号集合（大于等于1的数字，且以分号结尾） -->
+                                        <name>receiver_list</name>
+                                        <type>string</type>
+                                        <format>^([1-9]+[0-9]*;)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 抄送人编号集合（大于等于1的数字，且以分号结尾） -->
+                                        <name>carbon_copy_list</name>
+                                        <type>string</type>
+                                        <format>^([1-9]+[0-9]*;)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 密送人编号集合（大于等于1的数字，且以分号结尾） -->
+                                        <name>blind_carbon_copy_list</name>
+                                        <type>string</type>
+                                        <format>^([1-9]+[0-9]*;)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 读取状态（0:未读 1:已读） -->
+                                        <name>read_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除消息 -->
+                        <servletName>removeMessage</servletName>
+                        <sdboType>delete</sdboType>
+                        <namespace>deleteMessage</namespace>
+                        <permission>communication_removeMessage</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取消息内容 -->
+                        <servletName>getMessageContent</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 修改数据 -->
+                                update,updateMessage:id,read_status;
+                                <!-- 获取数据 -->
+                                select,selectMessage:id
+                        </namespace>
+                        <permission>communication_getMessageContent</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 读取状态（0:未读 1:已读） -->
+                                        <name>read_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取消息（消息编号） -->
+                        <servletName>getMessageById</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectMessage</namespace>
+                        <permission>communication_getMessageById</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取消息 -->
+                        <servletName>getMessageByType</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectMessage</namespace>
+                        <permission>communication_getMessageByType</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 发件人编号（大于等于0的数字） -->
+                                        <name>sender_id</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 消息类型（1:个人消息 2:系统消息 3:工作流审批消息） -->
+                                        <name>message_type</name>
+                                        <type>integer</type>
+                                        <format>^[123]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容类型（1:即时消息 2:邮件消息 3:语音消息） -->
+                                        <name>content_type</name>
+                                        <type>integer</type>
+                                        <format>^[123]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 读取状态（0:未读 1:已读） -->
+                                        <name>read_status</name>
+                                        <type>integer</type>
+                                        <format>^[01]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+        </dispatch>
+</config>

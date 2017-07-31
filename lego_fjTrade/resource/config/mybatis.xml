@@ -1,0 +1,1795 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_fjTrade">
+        <!-- 船运损耗报告（船板）[fj-trade_boat-ullage-report] -->
+        <insert id = "insertBoatUllageReport" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_boat-ullage-report` (`uuid`, `vehicle_information_uuid`, `quantity`, `cluster_list`, `create_datetime`) values (#{uuid}, #{vehicle_information_uuid}, #{quantity}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteBoatUllageReport" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_boat-ullage-report`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateBoatUllageReport" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_boat-ullage-report`]]>
+                <set>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = #{vehicle_information_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = null,]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[`quantity` = #{quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_quantity">
+                                <![CDATA[`quantity` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectBoatUllageReport" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_boat-ullage-report`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 物流合同[fj-trade_contract-logistics] -->
+        <insert id = "insertContractLogistics" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_contract-logistics` (`uuid`, `contract_code`, `trade_contract_code`, `logistics_uuid`, `employer_uuid`, `normal_cluster_list`, `final_cluster_list`, `carrier_type`, `product_name`, `load_place`, `unload_place`, `start_datetime`, `end_datetime`, `freight`, `quantity`, `contract_ullage`, `sign_datetime`, `remark`, `status`, `create_datetime`) values (#{uuid}, #{contract_code}, #{trade_contract_code}, #{logistics_uuid}, #{employer_uuid}, #{normal_cluster_list}, #{final_cluster_list}, #{carrier_type}, #{product_name}, #{load_place}, #{unload_place}, #{start_datetime}, #{end_datetime}, #{freight}, #{quantity}, #{contract_ullage}, #{sign_datetime}, #{remark}, #{status}, now())]]>
+        </insert>
+        <delete id = "deleteContractLogistics" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_contract-logistics`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != trade_contract_code">
+                                <![CDATA[and `trade_contract_code` = #{trade_contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateContractLogistics" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_contract-logistics`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != trade_contract_code">
+                                <![CDATA[`trade_contract_code` = #{trade_contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_trade_contract_code">
+                                <![CDATA[`trade_contract_code` = null,]]>
+                        </if>
+                        <if test = "null != logistics_uuid">
+                                <![CDATA[`logistics_uuid` = #{logistics_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_logistics_uuid">
+                                <![CDATA[`logistics_uuid` = null,]]>
+                        </if>
+                        <if test = "null != employer_uuid">
+                                <![CDATA[`employer_uuid` = #{employer_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_employer_uuid">
+                                <![CDATA[`employer_uuid` = null,]]>
+                        </if>
+                        <if test = "null != normal_cluster_list">
+                                <![CDATA[`normal_cluster_list` = #{normal_cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_normal_cluster_list">
+                                <![CDATA[`normal_cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != final_cluster_list">
+                                <![CDATA[`final_cluster_list` = #{final_cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_final_cluster_list">
+                                <![CDATA[`final_cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != carrier_type">
+                                <![CDATA[`carrier_type` = #{carrier_type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_carrier_type">
+                                <![CDATA[`carrier_type` = null,]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[`product_name` = #{product_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_product_name">
+                                <![CDATA[`product_name` = null,]]>
+                        </if>
+                        <if test = "null != load_place">
+                                <![CDATA[`load_place` = #{load_place},]]>
+                        </if>
+                        <if test = "'set_null' == sn_load_place">
+                                <![CDATA[`load_place` = null,]]>
+                        </if>
+                        <if test = "null != unload_place">
+                                <![CDATA[`unload_place` = #{unload_place},]]>
+                        </if>
+                        <if test = "'set_null' == sn_unload_place">
+                                <![CDATA[`unload_place` = null,]]>
+                        </if>
+                        <if test = "null != start_datetime">
+                                <![CDATA[`start_datetime` = #{start_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_start_datetime">
+                                <![CDATA[`start_datetime` = null,]]>
+                        </if>
+                        <if test = "null != end_datetime">
+                                <![CDATA[`end_datetime` = #{end_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_end_datetime">
+                                <![CDATA[`end_datetime` = null,]]>
+                        </if>
+                        <if test = "null != freight">
+                                <![CDATA[`freight` = #{freight},]]>
+                        </if>
+                        <if test = "'set_null' == sn_freight">
+                                <![CDATA[`freight` = null,]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[`quantity` = #{quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_quantity">
+                                <![CDATA[`quantity` = null,]]>
+                        </if>
+                        <if test = "null != contract_ullage">
+                                <![CDATA[`contract_ullage` = #{contract_ullage},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_ullage">
+                                <![CDATA[`contract_ullage` = null,]]>
+                        </if>
+                        <if test = "null != sign_datetime">
+                                <![CDATA[`sign_datetime` = #{sign_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_sign_datetime">
+                                <![CDATA[`sign_datetime` = null,]]>
+                        </if>
+                        <if test = "null != remark">
+                                <![CDATA[`remark` = #{remark},]]>
+                        </if>
+                        <if test = "'set_null' == sn_remark">
+                                <![CDATA[`remark` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectContractLogistics" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_contract-logistics`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != trade_contract_code">
+                                <![CDATA[and `trade_contract_code` = #{trade_contract_code}]]>
+                        </if>
+                        <if test = "null != logistics_uuid">
+                                <![CDATA[and `logistics_uuid` = #{logistics_uuid}]]>
+                        </if>
+                        <if test = "null != employer_uuid">
+                                <![CDATA[and `employer_uuid` = #{employer_uuid}]]>
+                        </if>
+                        <if test = "null != carrier_type">
+                                <![CDATA[and `carrier_type` = #{carrier_type}]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[and `product_name` = #{product_name}]]>
+                        </if>
+                        <if test = "null != product_name_fuzzy">
+                                <![CDATA[and `product_name` like CONCAT('%',#{product_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != load_place">
+                                <![CDATA[and `load_place` = #{load_place}]]>
+                        </if>
+                        <if test = "null != unload_place">
+                                <![CDATA[and `unload_place` = #{unload_place}]]>
+                        </if>
+                        <if test = "null != freight">
+                                <![CDATA[and `freight` = #{freight}]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[and `quantity` = #{quantity}]]>
+                        </if>
+                        <if test = "null != contract_ullage">
+                                <![CDATA[and `contract_ullage` = #{contract_ullage}]]>
+                        </if>
+                        <if test = "null != start_sign_datetime and null != end_sign_datetime">
+                                <![CDATA[and `sign_datetime` between #{start_sign_datetime} and #{end_sign_datetime}]]>
+                        </if>
+                        <if test = "null != remark">
+                                <![CDATA[and `remark` = #{remark}]]>
+                        </if>
+                        <if test = "null != remark_fuzzy">
+                                <![CDATA[and `remark` like CONCAT('%',#{remark_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 贸易合同[fj-trade_contract-trade] -->
+        <insert id = "insertContractTrade" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_contract-trade` (`uuid`, `contract_code`, `type`, `buyer_uuid`, `seller_uuid`, `normal_cluster_list`, `final_cluster_list`, `product_name`, `real_name`, `price`, `quantity`, `specification`, `deliver_place`, `deliver_datetime`, `sign_datetime`, `contract_ullage`, `warehouse_uuid`, `remark`, `status`, `create_datetime`) values (#{uuid}, #{contract_code}, #{type}, #{buyer_uuid}, #{seller_uuid}, #{normal_cluster_list}, #{final_cluster_list}, #{product_name}, #{real_name}, #{price}, #{quantity}, #{specification}, #{deliver_place}, #{deliver_datetime}, #{sign_datetime}, #{contract_ullage}, #{warehouse_uuid}, #{remark}, #{status}, now())]]>
+        </insert>
+        <delete id = "deleteContractTrade" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_contract-trade`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateContractTrade" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_contract-trade`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[`type` = #{type},]]>
+                        </if>
+                        <if test = "null != buyer_uuid">
+                                <![CDATA[`buyer_uuid` = #{buyer_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_buyer_uuid">
+                                <![CDATA[`buyer_uuid` = null,]]>
+                        </if>
+                        <if test = "null != seller_uuid">
+                                <![CDATA[`seller_uuid` = #{seller_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_seller_uuid">
+                                <![CDATA[`seller_uuid` = null,]]>
+                        </if>
+                        <if test = "null != normal_cluster_list">
+                                <![CDATA[`normal_cluster_list` = #{normal_cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_normal_cluster_list">
+                                <![CDATA[`normal_cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != final_cluster_list">
+                                <![CDATA[`final_cluster_list` = #{final_cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_final_cluster_list">
+                                <![CDATA[`final_cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[`product_name` = #{product_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_product_name">
+                                <![CDATA[`product_name` = null,]]>
+                        </if>
+                        <if test = "null != real_name">
+                                <![CDATA[`real_name` = #{real_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_real_name">
+                                <![CDATA[`real_name` = null,]]>
+                        </if>
+                        <if test = "null != price">
+                                <![CDATA[`price` = #{price},]]>
+                        </if>
+                        <if test = "'set_null' == sn_price">
+                                <![CDATA[`price` = null,]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[`quantity` = #{quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_quantity">
+                                <![CDATA[`quantity` = null,]]>
+                        </if>
+                        <if test = "null != specification">
+                                <![CDATA[`specification` = #{specification},]]>
+                        </if>
+                        <if test = "'set_null' == sn_specification">
+                                <![CDATA[`specification` = null,]]>
+                        </if>
+                        <if test = "null != deliver_place">
+                                <![CDATA[`deliver_place` = #{deliver_place},]]>
+                        </if>
+                        <if test = "'set_null' == sn_deliver_place">
+                                <![CDATA[`deliver_place` = null,]]>
+                        </if>
+                        <if test = "null != deliver_datetime">
+                                <![CDATA[`deliver_datetime` = #{deliver_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_deliver_datetime">
+                                <![CDATA[`deliver_datetime` = null,]]>
+                        </if>
+                        <if test = "null != sign_datetime">
+                                <![CDATA[`sign_datetime` = #{sign_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_sign_datetime">
+                                <![CDATA[`sign_datetime` = null,]]>
+                        </if>
+                        <if test = "null != contract_ullage">
+                                <![CDATA[`contract_ullage` = #{contract_ullage},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_ullage">
+                                <![CDATA[`contract_ullage` = null,]]>
+                        </if>
+                        <if test = "null != warehouse_uuid">
+                                <![CDATA[`warehouse_uuid` = #{warehouse_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_warehouse_uuid">
+                                <![CDATA[`warehouse_uuid` = null,]]>
+                        </if>
+                        <if test = "null != remark">
+                                <![CDATA[`remark` = #{remark},]]>
+                        </if>
+                        <if test = "'set_null' == sn_remark">
+                                <![CDATA[`remark` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectContractTrade" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_contract-trade`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[and `type` = #{type}]]>
+                        </if>
+                        <if test = "null != buyer_uuid">
+                                <![CDATA[and `buyer_uuid` = #{buyer_uuid}]]>
+                        </if>
+                        <if test = "null != seller_uuid">
+                                <![CDATA[and `seller_uuid` = #{seller_uuid}]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[and `product_name` = #{product_name}]]>
+                        </if>
+                        <if test = "null != product_name_fuzzy">
+                                <![CDATA[and `product_name` like CONCAT('%',#{product_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != real_name">
+                                <![CDATA[and `real_name` = #{real_name}]]>
+                        </if>
+                        <if test = "null != real_name_fuzzy">
+                                <![CDATA[and `real_name` like CONCAT('%',#{real_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != start_price and null != end_price">
+                                <![CDATA[and `price` between #{start_price} and #{end_price}]]>
+                        </if>
+                        <if test = "null != start_quantity and null != end_quantity">
+                                <![CDATA[and `quantity` between #{start_quantity} and #{end_quantity}]]>
+                        </if>
+                        <if test = "null != specification_fuzzy">
+                                <![CDATA[and `specification` like CONCAT('%',#{specification_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != deliver_place">
+                                <![CDATA[and `deliver_place` = #{deliver_place}]]>
+                        </if>
+                        <if test = "null != start_sign_datetime and null != end_sign_datetime">
+                                <![CDATA[and `sign_datetime` between #{start_sign_datetime} and #{end_sign_datetime}]]>
+                        </if>
+                        <if test = "null != contract_ullage">
+                                <![CDATA[and `contract_ullage` = #{contract_ullage}]]>
+                        </if>
+                        <if test = "null != warehouse_uuid">
+                                <![CDATA[and `warehouse_uuid` = #{warehouse_uuid}]]>
+                        </if>
+                        <if test = "null != remark">
+                                <![CDATA[and `remark` = #{remark}]]>
+                        </if>
+                        <if test = "null != remark_fuzzy">
+                                <![CDATA[and `remark` like CONCAT('%',#{remark_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 储罐合同[fj-trade_contract-warehouse-pot] -->
+        <insert id = "insertContractWarehousePot" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_contract-warehouse-pot` (`uuid`, `contract_code`, `leaser_uuid`, `lessor_uuid`, `start_datetime`, `end_datetime`, `normal_cluster_list`, `final_cluster_list`, `status`, `create_datetime`) values (#{uuid}, #{contract_code}, #{leaser_uuid}, #{lessor_uuid}, #{start_datetime}, #{end_datetime}, #{normal_cluster_list}, #{final_cluster_list}, #{status}, now())]]>
+        </insert>
+        <delete id = "deleteContractWarehousePot" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_contract-warehouse-pot`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateContractWarehousePot" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_contract-warehouse-pot`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != leaser_uuid">
+                                <![CDATA[`leaser_uuid` = #{leaser_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_leaser_uuid">
+                                <![CDATA[`leaser_uuid` = null,]]>
+                        </if>
+                        <if test = "null != lessor_uuid">
+                                <![CDATA[`lessor_uuid` = #{lessor_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_lessor_uuid">
+                                <![CDATA[`lessor_uuid` = null,]]>
+                        </if>
+                        <if test = "null != start_datetime">
+                                <![CDATA[`start_datetime` = #{start_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_start_datetime">
+                                <![CDATA[`start_datetime` = null,]]>
+                        </if>
+                        <if test = "null != end_datetime">
+                                <![CDATA[`end_datetime` = #{end_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_end_datetime">
+                                <![CDATA[`end_datetime` = null,]]>
+                        </if>
+                        <if test = "null != normal_cluster_list">
+                                <![CDATA[`normal_cluster_list` = #{normal_cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_normal_cluster_list">
+                                <![CDATA[`normal_cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != final_cluster_list">
+                                <![CDATA[`final_cluster_list` = #{final_cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_final_cluster_list">
+                                <![CDATA[`final_cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectContractWarehousePot" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_contract-warehouse-pot`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != leaser_uuid">
+                                <![CDATA[and `leaser_uuid` = #{leaser_uuid}]]>
+                        </if>
+                        <if test = "null != lessor_uuid">
+                                <![CDATA[and `lessor_uuid` = #{lessor_uuid}]]>
+                        </if>
+                        <if test = "null != start_datetime">
+                                <![CDATA[and `start_datetime` >= #{start_datetime}]]>
+                        </if>
+                        <if test = "null != end_datetime">
+                                <![CDATA[and `end_datetime` <= #{end_datetime}]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[and `status` = #{status}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 提货委托函[fj-trade_deliver-entrust-letter] -->
+        <insert id = "insertDeliverEntrustLetter" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_deliver-entrust-letter` (`uuid`, `contract_code`, `place`, `deliver_datetime`, `cluster_list`, `create_datetime`) values (#{uuid}, #{contract_code}, #{place}, #{deliver_datetime}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteDeliverEntrustLetter" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_deliver-entrust-letter`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateDeliverEntrustLetter" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_deliver-entrust-letter`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != place">
+                                <![CDATA[`place` = #{place},]]>
+                        </if>
+                        <if test = "'set_null' == sn_place">
+                                <![CDATA[`place` = null,]]>
+                        </if>
+                        <if test = "null != deliver_datetime">
+                                <![CDATA[`deliver_datetime` = #{deliver_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_deliver_datetime">
+                                <![CDATA[`deliver_datetime` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectDeliverEntrustLetter" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_deliver-entrust-letter`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != place">
+                                <![CDATA[and `place` = #{place}]]>
+                        </if>
+                        <if test = "null != place_fuzzy">
+                                <![CDATA[and `place` like CONCAT('%',#{place_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != start_deliver_datetime and null != end_deliver_datetime">
+                                <![CDATA[and `deliver_datetime` between #{start_deliver_datetime} and #{end_deliver_datetime}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 入库单[fj-trade_godown-entry] -->
+        <insert id = "insertGodownEntry" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_godown-entry` (`uuid`, `vehicle_information_uuid`, `entry_datetime`, `tare_weight`, `gross_weight`, `net_weight`, `warehouse_pot_uuid`, `cluster_list`, `create_datetime`) values (#{uuid}, #{vehicle_information_uuid}, #{entry_datetime}, #{tare_weight}, #{gross_weight}, #{net_weight}, #{warehouse_pot_uuid}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteGodownEntry" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_godown-entry`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateGodownEntry" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_godown-entry`]]>
+                <set>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = #{vehicle_information_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = null,]]>
+                        </if>
+                        <if test = "null != entry_datetime">
+                                <![CDATA[`entry_datetime` = #{entry_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_entry_datetime">
+                                <![CDATA[`entry_datetime` = null,]]>
+                        </if>
+                        <if test = "null != tare_weight">
+                                <![CDATA[`tare_weight` = #{tare_weight},]]>
+                        </if>
+                        <if test = "'set_null' == sn_tare_weight">
+                                <![CDATA[`tare_weight` = null,]]>
+                        </if>
+                        <if test = "null != gross_weight">
+                                <![CDATA[`gross_weight` = #{gross_weight},]]>
+                        </if>
+                        <if test = "'set_null' == sn_gross_weight">
+                                <![CDATA[`gross_weight` = null,]]>
+                        </if>
+                        <if test = "null != net_weight">
+                                <![CDATA[`net_weight` = #{net_weight},]]>
+                        </if>
+                        <if test = "'set_null' == sn_net_weight">
+                                <![CDATA[`net_weight` = null,]]>
+                        </if>
+                        <if test = "null != warehouse_pot_uuid">
+                                <![CDATA[`warehouse_pot_uuid` = #{warehouse_pot_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_warehouse_pot_uuid">
+                                <![CDATA[`warehouse_pot_uuid` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectGodownEntry" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_godown-entry`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                        <if test = "null != start_entry_datetime and null != end_entry_datetime">
+                                <![CDATA[and `entry_datetime` between #{start_entry_datetime} and #{end_entry_datetime}]]>
+                        </if>
+                        <if test = "null != start_tare_weight and null != end_tare_weight">
+                                <![CDATA[and `tare_weight` between #{start_tare_weight} and #{end_tare_weight}]]>
+                        </if>
+                        <if test = "null != start_gross_weight and null != end_gross_weight">
+                                <![CDATA[and `gross_weight` between #{start_gross_weight} and #{end_gross_weight}]]>
+                        </if>
+                        <if test = "null != start_net_weight and null != end_net_weight">
+                                <![CDATA[and `net_weight` between #{start_net_weight} and #{end_net_weight}]]>
+                        </if>
+                        <if test = "null != warehouse_pot_uuid">
+                                <![CDATA[and `warehouse_pot_uuid` = #{warehouse_pot_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 入库通知单[fj-trade_godown-entry-notify] -->
+        <insert id = "insertGodownEntryNotify" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_godown-entry-notify` (`uuid`, `contract_code`, `product_name`, `quantity`, `start_datetime`, `end_datetime`, `warehouse_pot_uuid`, `cluster_list`, `create_datetime`) values (#{uuid}, #{contract_code}, #{product_name}, #{quantity}, #{start_datetime}, #{end_datetime}, #{warehouse_pot_uuid}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteGodownEntryNotify" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_godown-entry-notify`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateGodownEntryNotify" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_godown-entry-notify`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[`product_name` = #{product_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_product_name">
+                                <![CDATA[`product_name` = null,]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[`quantity` = #{quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_quantity">
+                                <![CDATA[`quantity` = null,]]>
+                        </if>
+                        <if test = "null != start_datetime">
+                                <![CDATA[`start_datetime` = #{start_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_start_datetime">
+                                <![CDATA[`start_datetime` = null,]]>
+                        </if>
+                        <if test = "null != end_datetime">
+                                <![CDATA[`end_datetime` = #{end_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_end_datetime">
+                                <![CDATA[`end_datetime` = null,]]>
+                        </if>
+                        <if test = "null != warehouse_pot_uuid">
+                                <![CDATA[`warehouse_pot_uuid` = #{warehouse_pot_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_warehouse_pot_uuid">
+                                <![CDATA[`warehouse_pot_uuid` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectGodownEntryNotify" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_godown-entry-notify`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[and `product_name` = #{product_name}]]>
+                        </if>
+                        <if test = "null != product_name_fuzzy">
+                                <![CDATA[and `product_name` like CONCAT('%',#{product_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != start_quantity and null != end_quantity">
+                                <![CDATA[and `quantity` between #{start_quantity} and #{end_quantity}]]>
+                        </if>
+                        <if test = "null != warehouse_pot_uuid">
+                                <![CDATA[and `warehouse_pot_uuid` = #{warehouse_pot_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 出库单[fj-trade_godown-exit] -->
+        <insert id = "insertGodownExit" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_godown-exit` (`uuid`, `vehicle_information_uuid`, `exit_datetime`, `plan_quantity`, `actual_quantity`, `tare_weight`, `gross_weight`, `cluster_list`, `create_datetime`) values (#{uuid}, #{vehicle_information_uuid}, #{exit_datetime}, #{plan_quantity}, #{actual_quantity}, #{tare_weight}, #{gross_weight}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteGodownExit" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_godown-exit`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateGodownExit" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_godown-exit`]]>
+                <set>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = #{vehicle_information_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = null,]]>
+                        </if>
+                        <if test = "null != exit_datetime">
+                                <![CDATA[`exit_datetime` = #{exit_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_exit_datetime">
+                                <![CDATA[`exit_datetime` = null,]]>
+                        </if>
+                        <if test = "null != plan_quantity">
+                                <![CDATA[`plan_quantity` = #{plan_quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_plan_quantity">
+                                <![CDATA[`plan_quantity` = null,]]>
+                        </if>
+                        <if test = "null != actual_quantity">
+                                <![CDATA[`actual_quantity` = #{actual_quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_actual_quantity">
+                                <![CDATA[`actual_quantity` = null,]]>
+                        </if>
+                        <if test = "null != tare_weight">
+                                <![CDATA[`tare_weight` = #{tare_weight},]]>
+                        </if>
+                        <if test = "'set_null' == sn_tare_weight">
+                                <![CDATA[`tare_weight` = null,]]>
+                        </if>
+                        <if test = "null != gross_weight">
+                                <![CDATA[`gross_weight` = #{gross_weight},]]>
+                        </if>
+                        <if test = "'set_null' == sn_gross_weight">
+                                <![CDATA[`gross_weight` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectGodownExit" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_godown-exit`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                        <if test = "null != start_exit_datetime and null != end_exit_datetime">
+                                <![CDATA[and `exit_datetime` between #{start_exit_datetime} and #{end_exit_datetime}]]>
+                        </if>
+                        <if test = "null != start_plan_quantity and null != end_plan_quantity">
+                                <![CDATA[and `plan_quantity` between #{start_plan_quantity} and #{end_plan_quantity}]]>
+                        </if>
+                        <if test = "null != start_actual_quantity and null != end_actual_quantity">
+                                <![CDATA[and `actual_quantity` between #{start_actual_quantity} and #{end_actual_quantity}]]>
+                        </if>
+                        <if test = "null != start_tare_weight and null != end_tare_weight">
+                                <![CDATA[and `tare_weight` between #{start_tare_weight} and #{end_tare_weight}]]>
+                        </if>
+                        <if test = "null != start_gross_weight and null != end_gross_weight">
+                                <![CDATA[and `gross_weight` between #{start_gross_weight} and #{end_gross_weight}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 货物确认函[fj-trade_goods-confirm-letter] -->
+        <insert id = "insertGoodsConfirmLetter" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_goods-confirm-letter` (`uuid`, `contract_code`, `cluster_list`, `create_datetime`) values (#{uuid}, #{contract_code}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteGoodsConfirmLetter" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_goods-confirm-letter`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateGoodsConfirmLetter" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_goods-confirm-letter`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectGoodsConfirmLetter" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_goods-confirm-letter`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 发票信息[fj-trade_invoice-information] -->
+        <insert id = "insertInvoiceInformation" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_invoice-information` (`uuid`, `contract_code`, `type`, `product_name`, `price`, `quantity`, `unit`, `tax_rate`, `invoice_datetime`, `cluster_list`, `remark`, `create_datetime`) values (#{uuid}, #{contract_code}, #{type}, #{product_name}, #{price}, #{quantity}, #{unit}, #{tax_rate}, #{invoice_datetime}, #{cluster_list}, #{remark}, now())]]>
+        </insert>
+        <delete id = "deleteInvoiceInformation" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_invoice-information`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateInvoiceInformation" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_invoice-information`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[`type` = #{type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_type">
+                                <![CDATA[`type` = null,]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[`product_name` = #{product_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_product_name">
+                                <![CDATA[`product_name` = null,]]>
+                        </if>
+                        <if test = "null != price">
+                                <![CDATA[`price` = #{price},]]>
+                        </if>
+                        <if test = "'set_null' == sn_price">
+                                <![CDATA[`price` = null,]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[`quantity` = #{quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_quantity">
+                                <![CDATA[`quantity` = null,]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[`quantity` = #{quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_quantity">
+                                <![CDATA[`quantity` = null,]]>
+                        </if>
+                        <if test = "null != tax_rate">
+                                <![CDATA[`tax_rate` = #{tax_rate},]]>
+                        </if>
+                        <if test = "'set_null' == sn_tax_rate">
+                                <![CDATA[`tax_rate` = null,]]>
+                        </if>
+                        <if test = "null != invoice_datetime">
+                                <![CDATA[`invoice_datetime` = #{invoice_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_invoice_datetime">
+                                <![CDATA[`invoice_datetime` = null,]]>
+                        </if>
+                        <if test = "null != unit">
+                                <![CDATA[`unit` = #{unit},]]>
+                        </if>
+                        <if test = "'set_null' == sn_unit">
+                                <![CDATA[`unit` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                        <if test = "null != remark">
+                                <![CDATA[`remark` = #{remark},]]>
+                        </if>
+                        <if test = "'set_null' == sn_remark">
+                                <![CDATA[`remark` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectInvoiceInformation" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_invoice-information`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[and `type` = #{type}]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[and `product_name` = #{product_name}]]>
+                        </if>
+                        <if test = "null != product_name_fuzzy">
+                                <![CDATA[and `product_name` like CONCAT('%',#{product_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != start_price and null != end_price">
+                                <![CDATA[and `price` between #{start_price} and #{end_price}]]>
+                        </if>
+                        <if test = "null != start_quantity and null != end_quantity">
+                                <![CDATA[and `quantity` between #{start_quantity} and #{end_quantity}]]>
+                        </if>
+                        <if test = "null != start_tax_rate and null != end_tax_rate">
+                                <![CDATA[and `tax_rate` between #{start_tax_rate} and #{end_tax_rate}]]>
+                        </if>
+                        <if test = "null != start_invoice_datetime and null != end_invoice_datetime">
+                                <![CDATA[and `invoice_datetime` between #{start_invoice_datetime} and #{end_invoice_datetime}]]>
+                        </if>
+                        <if test = "null != unit">
+                                <![CDATA[and `unit` = #{unit}]]>
+                        </if>
+                        <if test = "null != remark">
+                                <![CDATA[and `remark` = #{remark}]]>
+                        </if>
+                        <if test = "null != remark_fuzzy">
+                                <![CDATA[and `remark` like CONCAT('%',#{remark_fuzzy},'%')]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 流水账[fj-trade_journal-account] -->
+        <insert id = "insertJournalAccount" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_journal-account` (`uuid`, `type`, `sign_code`, `name`, `description`, `price`, `quantity`, `record_datetime`, `create_datetime`) values (#{uuid}, #{type}, #{sign_code}, #{name}, #{description}, #{price}, #{quantity}, #{record_datetime}, now())]]>
+        </insert>
+        <delete id = "deleteJournalAccount" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_journal-account`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != sign_code">
+                                <![CDATA[and `sign_code` = #{sign_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateJournalAccount" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_journal-account`]]>
+                <set>
+                        <if test = "null != type">
+                                <![CDATA[`type` = #{type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_type">
+                                <![CDATA[`type` = null,]]>
+                        </if>
+                        <if test = "null != sign_code">
+                                <![CDATA[`sign_code` = #{sign_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_sign_code">
+                                <![CDATA[`sign_code` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                        <if test = "null != price">
+                                <![CDATA[`price` = #{price},]]>
+                        </if>
+                        <if test = "'set_null' == sn_price">
+                                <![CDATA[`price` = null,]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[`quantity` = #{quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_quantity">
+                                <![CDATA[`quantity` = null,]]>
+                        </if>
+                        <if test = "null != record_datetime">
+                                <![CDATA[`record_datetime` = #{record_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_record_datetime">
+                                <![CDATA[`record_datetime` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectJournalAccount" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_journal-account`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[and `type` = #{type}]]>
+                        </if>
+                        <if test = "null != sign_code">
+                                <![CDATA[and `sign_code` = #{sign_code}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != name_fuzzy">
+                                <![CDATA[and `name` like CONCAT('%',#{name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != description_fuzzy">
+                                <![CDATA[and `description` like CONCAT('%',#{description_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != start_price and null != end_price">
+                                <![CDATA[and `price` between #{start_price} and #{end_price}]]>
+                        </if>
+                        <if test = "null != start_quantity and null != end_quantity">
+                                <![CDATA[and `quantity` between #{start_quantity} and #{end_quantity}]]>
+                        </if>
+                        <if test = "null != start_record_datetime and null != end_record_datetime">
+                                <![CDATA[and `record_datetime` between #{start_record_datetime} and #{end_record_datetime}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 付款记录[fj-trade_paid-record] -->
+        <insert id = "insertPaidRecord" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_paid-record` (`uuid`, `contract_code`, `amount`, `paid_datetime`, `cluster_list`, `create_datetime`) values (#{uuid}, #{contract_code}, #{amount}, #{paid_datetime}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deletePaidRecord" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_paid-record`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updatePaidRecord" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_paid-record`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != amount">
+                                <![CDATA[`amount` = #{amount},]]>
+                        </if>
+                        <if test = "'set_null' == sn_amount">
+                                <![CDATA[`amount` = null,]]>
+                        </if>
+                        <if test = "null != paid_datetime">
+                                <![CDATA[`paid_datetime` = #{paid_datetime},]]>
+                        </if>
+                        <if test = "'set_null' == sn_paid_datetime">
+                                <![CDATA[`paid_datetime` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectPaidRecord" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_paid-record`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != start_amount and null != end_amount">
+                                <![CDATA[and `amount` between #{start_amount} and #{end_amount}]]>
+                        </if>
+                        <if test = "null != start_paid_datetime and null != end_paid_datetime">
+                                <![CDATA[and `paid_datetime` between #{start_paid_datetime} and #{end_paid_datetime}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 对账单[fj-trade_settlement-bill] -->
+        <insert id = "insertSettlementBill" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_settlement-bill` (`uuid`, `type`, `buyer_uuid`, `seller_uuid`, `contract_code`, `product_name`, `contract_ullage`, `load_quantity`, `unload_quantity`, `settle_quantity`, `goods_price`, `invoice_quantity`, `paid_amount`, `cluster_list`, `create_datetime`) values (#{uuid}, #{type}, #{buyer_uuid}, #{seller_uuid}, #{contract_code}, #{product_name}, #{contract_ullage}, #{load_quantity}, #{unload_quantity}, #{settle_quantity}, #{goods_price}, #{invoice_quantity}, #{paid_amount}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteSettlementBill" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_settlement-bill`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateSettlementBill" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_settlement-bill`]]>
+                <set>
+                        <if test = "null != type">
+                                <![CDATA[`type` = #{type},]]>
+                        </if>
+                        <if test = "'set_null' == sn_type">
+                                <![CDATA[`type` = null,]]>
+                        </if>
+                        <if test = "null != buyer_uuid">
+                                <![CDATA[`buyer_uuid` = #{buyer_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_buyer_uuid">
+                                <![CDATA[`buyer_uuid` = null,]]>
+                        </if>
+                        <if test = "null != seller_uuid">
+                                <![CDATA[`seller_uuid` = #{seller_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_seller_uuid">
+                                <![CDATA[`seller_uuid` = null,]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[`product_name` = #{product_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_product_name">
+                                <![CDATA[`product_name` = null,]]>
+                        </if>
+                        <if test = "null != contract_ullage">
+                                <![CDATA[`contract_ullage` = #{contract_ullage},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_ullage">
+                                <![CDATA[`contract_ullage` = null,]]>
+                        </if>
+                        <if test = "null != load_quantity">
+                                <![CDATA[`load_quantity` = #{load_quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_load_quantity">
+                                <![CDATA[`load_quantity` = null,]]>
+                        </if>
+                        <if test = "null != unload_quantity">
+                                <![CDATA[`unload_quantity` = #{unload_quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_unload_quantity">
+                                <![CDATA[`unload_quantity` = null,]]>
+                        </if>
+                        <if test = "null != settle_quantity">
+                                <![CDATA[`settle_quantity` = #{settle_quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_settle_quantity">
+                                <![CDATA[`settle_quantity` = null,]]>
+                        </if>
+                        <if test = "null != goods_price">
+                                <![CDATA[`goods_price` = #{goods_price},]]>
+                        </if>
+                        <if test = "'set_null' == sn_goods_price">
+                                <![CDATA[`goods_price` = null,]]>
+                        </if>
+                        <if test = "null != invoice_quantity">
+                                <![CDATA[`invoice_quantity` = #{invoice_quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_invoice_quantity">
+                                <![CDATA[`invoice_quantity` = null,]]>
+                        </if>
+                        <if test = "null != paid_amount">
+                                <![CDATA[`paid_amount` = #{paid_amount},]]>
+                        </if>
+                        <if test = "'set_null' == sn_paid_amount">
+                                <![CDATA[`paid_amount` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectSettlementBill" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_settlement-bill`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[and `type` = #{type}]]>
+                        </if>
+                        <if test = "null != buyer_uuid">
+                                <![CDATA[and `buyer_uuid` = #{buyer_uuid}]]>
+                        </if>
+                        <if test = "null != seller_uuid">
+                                <![CDATA[and `seller_uuid` = #{seller_uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != product_name">
+                                <![CDATA[and `product_name` = #{product_name}]]>
+                        </if>
+                        <if test = "null != product_name_fuzzy">
+                                <![CDATA[and `product_name` like CONCAT('%',#{product_name_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != contract_ullage">
+                                <![CDATA[and `contract_ullage` = #{contract_ullage}]]>
+                        </if>
+                        <if test = "null != start_contract_ullage and null != end_contract_ullage">
+                                <![CDATA[and `contract_ullage` between #{start_contract_ullage} and #{end_contract_ullage}]]>
+                        </if>
+                        <if test = "null != load_quantity">
+                                <![CDATA[and `load_quantity` = #{load_quantity}]]>
+                        </if>
+                        <if test = "null != start_load_quantity and null != end_load_quantity">
+                                <![CDATA[and `load_quantity` between #{start_load_quantity} and #{end_load_quantity}]]>
+                        </if>
+                        <if test = "null != unload_quantity">
+                                <![CDATA[and `unload_quantity` = #{unload_quantity}]]>
+                        </if>
+                        <if test = "null != start_unload_quantity and null != end_unload_quantity">
+                                <![CDATA[and `unload_quantity` between #{start_unload_quantity} and #{end_unload_quantity}]]>
+                        </if>
+                        <if test = "null != settle_quantity">
+                                <![CDATA[and `settle_quantity` = #{settle_quantity}]]>
+                        </if>
+                        <if test = "null != start_settle_quantity and null != end_settle_quantity">
+                                <![CDATA[and `settle_quantity` between #{start_settle_quantity} and #{end_settle_quantity}]]>
+                        </if>
+                        <if test = "null != goods_price">
+                                <![CDATA[and `goods_price` = #{goods_price}]]>
+                        </if>
+                        <if test = "null != start_goods_price and null != end_goods_price">
+                                <![CDATA[and `goods_price` between #{start_goods_price} and #{end_goods_price}]]>
+                        </if>
+                        <if test = "null != invoice_quantity">
+                                <![CDATA[and `invoice_quantity` = #{invoice_quantity}]]>
+                        </if>
+                        <if test = "null != start_invoice_quantity and null != end_invoice_quantity">
+                                <![CDATA[and `invoice_quantity` between #{start_invoice_quantity} and #{end_invoice_quantity}]]>
+                        </if>
+                        <if test = "null != paid_amount">
+                                <![CDATA[and `paid_amount` = #{paid_amount}]]>
+                        </if>
+                        <if test = "null != start_paid_amount and null != end_paid_amount">
+                                <![CDATA[and `paid_amount` between #{start_paid_amount} and #{end_paid_amount}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 岸罐报告（商检）[fj-trade_shore-tank-report] -->
+        <insert id = "insertShoreTankReport" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_shore-tank-report` (`uuid`, `vehicle_information_uuid`, `quantity`, `cluster_list`, `create_datetime`) values (#{uuid}, #{vehicle_information_uuid}, #{quantity}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteShoreTankReport" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_shore-tank-report`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateShoreTankReport" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_shore-tank-report`]]>
+                <set>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = #{vehicle_information_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = null,]]>
+                        </if>
+                        <if test = "null != quantity">
+                                <![CDATA[`quantity` = #{quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_quantity">
+                                <![CDATA[`quantity` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectShoreTankReport" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_shore-tank-report`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 化验报告（化验单）[fj-trade_test-report] -->
+        <insert id = "insertTestReport" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_test-report` (`uuid`, `vehicle_information_uuid`, `cluster_list`, `create_datetime`) values (#{uuid}, #{vehicle_information_uuid}, #{cluster_list}, now())]]>
+        </insert>
+        <delete id = "deleteTestReport" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_test-report`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateTestReport" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_test-report`]]>
+                <set>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = #{vehicle_information_uuid},]]>
+                        </if>
+                        <if test = "'set_null' == sn_vehicle_information_uuid">
+                                <![CDATA[`vehicle_information_uuid` = null,]]>
+                        </if>
+                        <if test = "null != cluster_list">
+                                <![CDATA[`cluster_list` = #{cluster_list},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster_list">
+                                <![CDATA[`cluster_list` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectTestReport" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_test-report`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != vehicle_information_uuid">
+                                <![CDATA[and `vehicle_information_uuid` = #{vehicle_information_uuid}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 车船信息[fj-trade_vehicle-information] -->
+        <insert id = "insertVehicleInformation" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_vehicle-information` (`uuid`, `contract_code`, `name`, `approved_load`, `deliver_quantity`, `contact_name`, `contact_number`, `idcard_number`) values (#{uuid}, #{contract_code}, #{name}, #{approved_load}, #{deliver_quantity}, #{contact_name}, #{contact_number}, #{idcard_number})]]>
+        </insert>
+        <delete id = "deleteVehicleInformation" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_vehicle-information`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateVehicleInformation" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_vehicle-information`]]>
+                <set>
+                        <if test = "null != contract_code">
+                                <![CDATA[`contract_code` = #{contract_code},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contract_code">
+                                <![CDATA[`contract_code` = null,]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != approved_load">
+                                <![CDATA[`approved_load` = #{approved_load},]]>
+                        </if>
+                        <if test = "'set_null' == sn_approved_load">
+                                <![CDATA[`approved_load` = null,]]>
+                        </if>
+                        <if test = "null != deliver_quantity">
+                                <![CDATA[`deliver_quantity` = #{deliver_quantity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_deliver_quantity">
+                                <![CDATA[`deliver_quantity` = null,]]>
+                        </if>
+                        <if test = "null != contact_name">
+                                <![CDATA[`contact_name` = #{contact_name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contact_name">
+                                <![CDATA[`contact_name` = null,]]>
+                        </if>
+                        <if test = "null != contact_number">
+                                <![CDATA[`contact_number` = #{contact_number},]]>
+                        </if>
+                        <if test = "'set_null' == sn_contact_number">
+                                <![CDATA[`contact_number` = null,]]>
+                        </if>
+                        <if test = "null != idcard_number">
+                                <![CDATA[`idcard_number` = #{idcard_number},]]>
+                        </if>
+                        <if test = "'set_null' == sn_idcard_number">
+                                <![CDATA[`idcard_number` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectVehicleInformation" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_vehicle-information`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != contract_code">
+                                <![CDATA[and `contract_code` = #{contract_code}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != approved_load">
+                                <![CDATA[and `approved_load` = #{approved_load}]]>
+                        </if>
+                        <if test = "null != start_approved_load and null != end_approved_load">
+                                <![CDATA[and `approved_load` between #{start_approved_load} and #{end_approved_load}]]>
+                        </if>
+                        <if test = "null != deliver_quantity">
+                                <![CDATA[and `deliver_quantity` = #{deliver_quantity}]]>
+                        </if>
+                        <if test = "null != start_deliver_quantity and null != end_deliver_quantity">
+                                <![CDATA[and `deliver_quantity` between #{start_deliver_quantity} and #{end_deliver_quantity}]]>
+                        </if>
+                        <if test = "null != contact_name">
+                                <![CDATA[and `contact_name` = #{contact_name}]]>
+                        </if>
+                        <if test = "null != contact_number">
+                                <![CDATA[and `contact_number` = #{contact_number}]]>
+                        </if>
+                        <if test = "null != idcard_number">
+                                <![CDATA[and `idcard_number` = #{idcard_number}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 仓库[fj-trade_warehouse] -->
+        <insert id = "insertWarehouse" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_warehouse` (`uuid`, `name`, `description`) values (#{uuid}, #{name}, #{description})]]>
+        </insert>
+        <delete id = "deleteWarehouse" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_warehouse`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateWarehouse" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_warehouse`]]>
+                <set>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectWarehouse" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_warehouse`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != name_fuzzy">
+                                <![CDATA[and `name` like CONCAT('%',#{name_fuzzy},'%')]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 储罐[fj-trade_warehouse-pot] -->
+        <insert id = "insertWarehousePot" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_warehouse-pot` (`uuid`, `warehouse_uuid`, `type`, `name`, `description`, `effective_capacity`, `charge_capacity`) values (#{uuid}, #{warehouse_uuid}, #{type}, #{name}, #{description}, #{effective_capacity}, #{charge_capacity})]]>
+        </insert>
+        <delete id = "deleteWarehousePot" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_warehouse-pot`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != warehouse_uuid">
+                                <![CDATA[and `warehouse_uuid` = #{warehouse_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateWarehousePot" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_warehouse-pot`]]>
+                <set>
+                        <if test = "null != warehouse_uuid">
+                                <![CDATA[`warehouse_uuid` = #{warehouse_uuid},]]>
+                        </if>
+                        <if test = "null != type">
+                                <![CDATA[`type` = #{type},]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                        <if test = "null != effective_capacity">
+                                <![CDATA[`effective_capacity` = #{effective_capacity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_effective_capacity">
+                                <![CDATA[`effective_capacity` = null,]]>
+                        </if>
+                        <if test = "null != charge_capacity">
+                                <![CDATA[`charge_capacity` = #{charge_capacity},]]>
+                        </if>
+                        <if test = "'set_null' == sn_charge_capacity">
+                                <![CDATA[`charge_capacity` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectWarehousePot" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_warehouse-pot`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != warehouse_uuid">
+                                <![CDATA[and `warehouse_uuid` = #{warehouse_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

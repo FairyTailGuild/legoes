@@ -1,0 +1,574 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+        <dispatch>
+                <servlet>
+                        <!-- 名称: 上传临时文件 -->
+                        <servletName>c_uploadTemporaryFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_uploadTemporaryFile</namespace>
+                        <permission>storage_c_uploadTemporaryFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 附件（尺寸小于等于30M，格式为：txt|jpg|gif|png|pdf|zip|rar|doc|docx|xls|xls） -->
+                                        <name>attachment</name>
+                                        <type>file</type>
+                                        <fileType>.+\.(txt|jpg|gif|png|pdf|zip|rar|doc|docx|xls|xlsx)$</fileType>
+                                        <fileMaxSize>30000000</fileMaxSize>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 保存为永久文件 -->
+                        <servletName>c_savePermanentFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_savePermanentFile</namespace>
+                        <permission>storage_c_savePermanentFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 保存为永久文件 -->
+                        <servletName>c_savePermanentFiles</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_savePermanentFiles</namespace>
+                        <permission>storage_c_savePermanentFiles</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 保存为永久文件 -->
+                        <servletName>t_savePermanentFile</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_savePermanentFile</namespace>
+                        <permission>storage_t_savePermanentFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 保存为永久文件 -->
+                        <servletName>t_savePermanentFiles</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_savePermanentFiles</namespace>
+                        <permission>storage_t_savePermanentFiles</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查文件是否存在 -->
+                        <servletName>c_checkFileExist</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_checkFileExist</namespace>
+                        <permission>storage_c_checkFileExist</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录的uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查文件是否存在 -->
+                        <servletName>c_checkFilesExist</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_checkFilesExist</namespace>
+                        <permission>storage_c_checkFilesExist</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录的uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查文件是否存在 -->
+                        <servletName>t_checkFileExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkFileExist</namespace>
+                        <permission>storage_t_checkFileExist</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录的uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查文件是否存在 -->
+                        <servletName>t_checkFilesExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkFilesExist</namespace>
+                        <permission>storage_t_checkFilesExist</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录的uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查文件是否“不”存在 -->
+                        <servletName>t_checkFileNotExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkFileNotExist</namespace>
+                        <permission>storage_t_checkFileNotExist</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录的uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 检查文件是否“不”存在 -->
+                        <servletName>t_checkFilesNotExist</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_checkFilesNotExist</namespace>
+                        <permission>storage_t_checkFilesNotExist</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 目录的uuid -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除文件 -->
+                        <servletName>c_removeFile</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeFile</namespace>
+                        <permission>storage_c_removeFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除文件 -->
+                        <servletName>c_removeFiles</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>c_removeFiles</namespace>
+                        <permission>storage_c_removeFiles</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除文件 -->
+                        <servletName>t_removeFile</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_removeFile</namespace>
+                        <permission>storage_t_removeFile</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除文件 -->
+                        <servletName>t_removeFiles</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_removeFiles</namespace>
+                        <permission>storage_t_removeFiles</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除附件 -->
+                        <servletName>t_removeAttachment</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_removeAttachment</namespace>
+                        <permission>storage_t_removeAttachment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改附件 -->
+                        <servletName>t_modifyAttachment</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>custom,t_modifyAttachment</namespace>
+                        <permission>storage_t_modifyAttachment</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.selectBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_certificate.updateBusinessLicense</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 查询文件集群信息 -->
+                        <servletName>getFileByClusterName</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>selectFile</namespace>
+                        <permission>storage_getFileByUuid</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid） -->
+                                        <name>cluster_name</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+        </dispatch>
+</config>

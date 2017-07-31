@@ -1,0 +1,152 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_cms">
+        <!-- 内容管理类别[cms_type] -->
+        <insert id = "insertCmsType" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `cms_type` (`name`, `description`) values (#{name}, #{description})]]>
+        </insert>
+        <delete id = "deleteCmsType" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `cms_type`]]>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateCmsType" parameterType = "java.util.HashMap">
+                <![CDATA[update `cms_type`]]>
+                <set>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectCmsType" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `cms_type`]]>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                        <if test = "null != ne_id">
+                                <![CDATA[and `id` != #{ne_id}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 内容管理内容[cms_content] -->
+        <insert id = "insertCmsContent" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `cms_content` (`type_id`, `title`, `content`, `cluster`, `status`, `creator_uuid`, `create_datetime`) values (#{type_id}, #{title}, #{content}, #{cluster}, #{status}, #{creator_uuid}, now())]]>
+        </insert>
+        <delete id = "deleteCmsContent" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `cms_content`]]>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                        <if test = "null != type_id">
+                                <![CDATA[and `type_id` = #{type_id}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateCmsContent" parameterType = "java.util.HashMap">
+                <![CDATA[update `cms_content`]]>
+                <set>
+                        <if test = "null != type_id">
+                                <![CDATA[`type_id` = #{type_id},]]>
+                        </if>
+                        <if test = "'set_null' == sn_type_id">
+                                <![CDATA[`type_id` = null,]]>
+                        </if>
+                        <if test = "null != title">
+                                <![CDATA[`title` = #{title},]]>
+                        </if>
+                        <if test = "'set_null' == sn_title">
+                                <![CDATA[`title` = null,]]>
+                        </if>
+                        <if test = "null != content">
+                                <![CDATA[`content` = #{content},]]>
+                        </if>
+                        <if test = "'set_null' == sn_content">
+                                <![CDATA[`content` = null,]]>
+                        </if>
+                        <if test = "null != cluster">
+                                <![CDATA[`cluster` = #{cluster},]]>
+                        </if>
+                        <if test = "'set_null' == sn_cluster">
+                                <![CDATA[`cluster` = null,]]>
+                        </if>
+                        <if test = "null != status">
+                                <![CDATA[`status` = #{status},]]>
+                        </if>
+                        <if test = "'set_null' == sn_status">
+                                <![CDATA[`status` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectCmsContent" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `cms_content`]]>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                        <if test = "null != ne_id">
+                                <![CDATA[and `id` != #{ne_id}]]>
+                        </if>
+                        <if test = "null != type_id">
+                                <![CDATA[and `type_id` = #{type_id}]]>
+                        </if>
+                        <if test = "null != title">
+                                <![CDATA[and `title` = #{title}]]>
+                        </if>
+                        <if test = "null != title_fuzzy">
+                                <![CDATA[and `title` like CONCAT('%',#{title_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != content">
+                                <![CDATA[and `content` = #{content}]]>
+                        </if>
+                        <if test = "null != content_fuzzy">
+                                <![CDATA[and `content` like CONCAT('%',#{content_fuzzy},'%')]]>
+                        </if>
+                        <if test = "null != creator_uuid">
+                                <![CDATA[and `creator_uuid` = #{creator_uuid}]]>
+                        </if>
+                        <if test = "null != start_datetime and null != end_datetime">
+                                <![CDATA[and create_datetime between #{start_datetime} and #{end_datetime}]]>
+                        </if>
+                </where>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+</mapper>

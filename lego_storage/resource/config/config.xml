@@ -1,0 +1,14 @@
+﻿<?xml version = "1.0" encoding = "utf-8"?>
+<config>
+	<!-- 需要在server.xml中设置maxSwallowSize（原因如下） -->
+	<!-- tomcat对数据包有尺寸限制，不能单次上传过大的文件。否则，会出现“连接重置”的信息。但这并不是一种错误。理论上，不应设置过大的附件尺寸，如果必须有此要求，那么需要在server.xml中增加maxSwallowSize="-1"这个标签属性。 -->
+	<!-- 文件过期检查周期（单位：毫秒） -->
+	<expireCheckCycle>600000</expireCheckCycle>
+	<!-- 文件上传路径 -->
+        <!-- <uploadPath><![CDATA[E:/tmp/tempUpload]]></uploadPath> -->
+        <uploadPath><![CDATA[/home/jack/Program/tomcat8/webapps/lego/upload]]></uploadPath>
+	<!-- 临时上传有效时间（单位：小时） -->
+	<tmpUploadFileCycle>1</tmpUploadFileCycle>
+	<!-- 上传有效时间（单位：年） -->
+	<uploadFileCycle>100</uploadFileCycle>
+</config>

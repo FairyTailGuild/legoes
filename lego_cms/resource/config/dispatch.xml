@@ -1,0 +1,543 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<config>
+        <dispatch>
+                <servlet>
+                        <!-- 名称: 添加类别 -->
+                        <servletName>addCmsType</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                non-select,selectCmsType:name;
+                                insert,insertCmsType:name,description
+                        </namespace>
+                        <permission>cms_addCmsType</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 类别名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除类别 -->
+                        <servletName>removeCmsType</servletName>
+                        <sdboType>delete</sdboType>
+                        <namespace>
+                                deleteCmsType
+                        </namespace>
+                        <permission>cms_removeCmsType</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改类别 -->
+                        <servletName>modifyCmsType</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                non-select,selectCmsType:name,id->ne_id;update,updateCmsType:id,name,description,sn_description
+                        </namespace>
+                        <permission>cms_modifyCmsType</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别描述（2-64个汉字、字符或数字） -->
+                                        <name>description</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,64}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别描述（置空） -->
+                                        <name>sn_description</name>
+                                        <type>string</type>
+                                        <format>^set_null$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取类别 -->
+                        <servletName>getCmsType</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>
+                                selectCmsType
+                        </namespace>
+                        <permission>cms_getCmsType</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别名称（2-32个汉字、字符或数字） -->
+                                        <name>name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加内容 -->
+                        <!-- ERROR_1: 没有查询到type_id对应的类别数据。 -->
+                        <!-- ERROR_2: cluster_name_list中的某个集群编号没有找到。 -->
+                        <!-- ERROR_3: 增加CMS内容数据时出错。 -->
+                        <servletName>addCmsContent</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>
+                                addCmsContent
+                        </namespace>
+                        <permission>cms_addCmsContent</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 类别编号（大于等于1的数字） -->
+                                        <name>type_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 标题（2-128个汉字、字符或数字） -->
+                                        <name>title</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,128}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>string</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid）（分号分隔） -->
+                                        <name>cluster_name_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除内容（所属用户） -->
+                        <servletName>removeCmsContentByUser</servletName>
+                        <sdboType>delete</sdboType>
+                        <namespace>
+                                deleteCmsContent
+                        </namespace>
+                        <permission>cms_removeCmsContentByUser</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 删除内容（管理员） -->
+                        <servletName>removeCmsContentByAdmin</servletName>
+                        <sdboType>delete</sdboType>
+                        <namespace>
+                                deleteCmsContent
+                        </namespace>
+                        <permission>cms_removeCmsContentByAdmin</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改内容（所属用户） -->
+                        <!-- ERROR_1: 没有查询到type_id对应的类别数据。 -->
+                        <!-- ERROR_2: cluster_name_list中的某个集群编号没有找到。 -->
+                        <!-- ERROR_3: 修改CMS内容数据时出错。 -->
+                        <servletName>modifyCmsContentByUser</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>
+                                modifyCmsContent
+                        </namespace>
+                        <permission>cms_modifyCmsContentByUser</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别编号（大于等于1的数字） -->
+                                        <name>type_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 标题（2-128个汉字、字符或数字） -->
+                                        <name>title</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>string</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid）（分号分隔） -->
+                                        <name>cluster_name_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <!-- 只要修改数据，状态就变为“未审核” -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>0</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改内容（管理员） -->
+                        <!-- ERROR_1: 没有查询到type_id对应的类别数据。 -->
+                        <!-- ERROR_2: cluster_name_list中的某个集群编号没有找到。 -->
+                        <!-- ERROR_3: 修改CMS内容数据时出错。 -->
+                        <servletName>modifyCmsContentByAdmin</servletName>
+                        <sdboType>custom</sdboType>
+                        <namespace>
+                                modifyCmsContent
+                        </namespace>
+                        <permission>cms_modifyCmsContentByAdmin</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别编号（大于等于1的数字） -->
+                                        <name>type_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 标题（2-128个汉字、字符或数字） -->
+                                        <name>title</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>string</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群名称（不带“-”的uuid）（分号分隔） -->
+                                        <name>cluster_name_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[012]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取内容（用户所属） -->
+                        <servletName>getCmsContentByUser</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>
+                                selectCmsContentByUser
+                        </namespace>
+                        <permission>cms_getCmsContent</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别编号（大于等于1的数字） -->
+                                        <name>type_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 标题（2-128个汉字、字符或数字） -->
+                                        <name>title</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 标题（模糊查询）（1-128个汉字、字符或数字） -->
+                                        <name>title_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{1,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>string</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（模糊查询）（1-10240个任意字符） -->
+                                        <name>content_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 搜索内容的开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 搜索内容的结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[012]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 登陆成功后存于Session中的用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 获取内容（管理员） -->
+                        <servletName>getCmsContentByAdmin</servletName>
+                        <sdboType>select</sdboType>
+                        <namespace>
+                                selectCmsContentByAdmin
+                        </namespace>
+                        <permission>cms_getCmsContent</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 编号（大于等于1的数字） -->
+                                        <name>id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 类别编号（大于等于1的数字） -->
+                                        <name>type_id</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 标题（2-128个汉字、字符或数字） -->
+                                        <name>title</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 标题（模糊查询）（1-128个汉字、字符或数字） -->
+                                        <name>title_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{1,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（1-10240个任意字符） -->
+                                        <name>content</name>
+                                        <type>string</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 内容（模糊查询）（1-10240个任意字符） -->
+                                        <name>content_fuzzy</name>
+                                        <type>string</type>
+                                        <format>^.{1,10240}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 搜索内容的开始时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>start_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 搜索内容的结束时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>end_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 状态（0:未审核 1:已审核 2:审核未通过） -->
+                                        <name>status</name>
+                                        <type>integer</type>
+                                        <format>^[012]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 用户uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 偏移（大于等于0的数字） -->
+                                        <name>offset</name>
+                                        <type>integer</type>
+                                        <format>^[0-9]+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 行数（大于等于1的数字） -->
+                                        <name>rows</name>
+                                        <type>integer</type>
+                                        <format>^[1-9]+[0-9]*$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+        </dispatch>
+</config>

@@ -1,0 +1,79 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "lego_demo">
+        <!-- [demo_human-info] -->
+        <!-- 注册用户 -->
+        <insert id = "register" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `demo_human-info` (`name`, `password`, `age`, `sex`, `code`, `address`, `remark`, `create_datetime`) values (#{name}, #{password}, #{age}, #{sex}, #{code}, #{address}, #{remark}, now())]]>
+        </insert>
+        <!-- 修改用户 -->
+        <delete id = "delete" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `demo_human-info` where `id` = #{id}]]>
+        </delete>
+        <!-- 修改信息 -->
+        <update id = "modify" parameterType = "java.util.HashMap">
+                <![CDATA[update `demo_human-info`]]>
+                <set>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "null != age">
+                                <![CDATA[`age` = #{age},]]>
+                        </if>
+                        <if test = "null != sex">
+                                <![CDATA[`sex` = #{sex},]]>
+                        </if>
+                        <if test = "null != code">
+                                <![CDATA[`code` = #{code},]]>
+                        </if>
+                        <if test = "null != address">
+                                <![CDATA[`address` = #{address},]]>
+                        </if>
+                        <if test = "null != remark">
+                                <![CDATA[`remark` = #{remark},]]>
+                        </if>
+                        <if test = "null != create_datetime">
+                                <![CDATA[`create_datetime` = #{create_datetime},]]>
+                        </if>
+                </set>
+                <![CDATA[where `id` = #{id}]]>
+        </update>
+        <!-- 修改用户名（事务：成功） -->
+        <update id = "transaction_modifyName_ok" parameterType = "java.util.HashMap">
+                <![CDATA[update `demo_human-info` set `name` = #{name} where `id` = #{id}]]>
+        </update>
+        <!-- 修改性别（事务：成功） -->
+        <update id = "transaction_modifySex_ok" parameterType = "java.util.HashMap">
+                <![CDATA[update `demo_human-info` set `sex` = #{sex} where `id` = #{id}]]>
+        </update>
+        <!-- 修改性别（事务：失败） -->
+        <update id = "transaction_modifySex_err" parameterType = "java.util.HashMap">
+                <![CDATA[update `demo_human-info` set `sex` = #{sex} where `id` = 0]]>
+        </update>
+        <!-- 检索数据 -->
+        <select id = "getInfo" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `demo_human-info`]]>
+                <where>
+                        <if test = "null != id">
+                                <![CDATA[and `id` = #{id}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != age">
+                                <![CDATA[and `age` = #{age}]]>
+                        </if>
+                        <if test = "null != sex">
+                                <![CDATA[and `sex` = #{sex}]]>
+                        </if>
+                        <if test = "null != code">
+                                <![CDATA[and `code` = #{code}]]>
+                        </if>
+                </where>
+                <![CDATA[limit #{offset}, #{rows}]]>
+        </select>
+        <!-- 获得计数 -->
+        <select id = "getCount" resultType = "java.util.HashMap">
+                <![CDATA[select count(*) as `count` from `demo_human-info`]]>
+        </select>
+</mapper>
