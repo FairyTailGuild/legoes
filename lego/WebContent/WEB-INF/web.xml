@@ -23,8 +23,9 @@
 	</context-param>
 	<context-param>
 		<param-name>db_url</param-name>
-		<param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value>
+		<!-- <param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value> -->
 		<!-- <param-value><![CDATA[jdbc:mysql://192.168.1.131:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value> -->
+		<param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego_show?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value>
 	</context-param>
 	<context-param>
 		<param-name>db_username</param-name>

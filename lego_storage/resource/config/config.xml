@@ -6,7 +6,8 @@
 	<expireCheckCycle>600000</expireCheckCycle>
 	<!-- 文件上传路径 -->
         <!-- <uploadPath><![CDATA[E:/tmp/tempUpload]]></uploadPath> -->
-        <uploadPath><![CDATA[/home/jack/Program/tomcat8/webapps/lego/upload]]></uploadPath>
+        <!-- <uploadPath><![CDATA[/home/jack/Program/tomcat8/webapps/lego/upload]]></uploadPath> -->
+        <uploadPath><![CDATA[D:/dev/local/fairyTailGuild/.metadata/.plugins/org.eclipse.wst.server.core/tmp1/wtpwebapps/lego/upload]]></uploadPath>
 	<!-- 临时上传有效时间（单位：小时） -->
 	<tmpUploadFileCycle>1</tmpUploadFileCycle>
 	<!-- 上传有效时间（单位：年） -->
