@@ -1,6 +1,10 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/2002/xmlspec/dtd/2.10/xmlspec.dtd">
-<web-app>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1"
+  metadata-complete="true">
 	<description>Lego Based On Palestink Framework</description>
 	<display-name>Lego</display-name>
 	<!-- 设置转换编码 -->
@@ -23,9 +27,9 @@
 	</context-param>
 	<context-param>
 		<param-name>db_url</param-name>
+		<param-value><![CDATA[jdbc:mysql://192.168.1.131:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value>
 		<!-- <param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value> -->
-		<!-- <param-value><![CDATA[jdbc:mysql://192.168.1.131:3306/lego?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value> -->
-		<param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego_show?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value>
+		<!-- <param-value><![CDATA[jdbc:mysql://127.0.0.1:3306/lego_show?useUnicode=true&characterEncoding=utf-8&useSSL=true]]></param-value> -->
 	</context-param>
 	<context-param>
 		<param-name>db_username</param-name>

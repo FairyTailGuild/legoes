@@ -199,7 +199,7 @@
                                         <name>vehicle_information_uuid</name>
                                         <type>string</type>
                                         <format>^[0-9a-zA-Z]{32}$</format>
-                                        <isNull>true</isNull>
+                                        <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
                                         <!-- 数量（小数点左边1-10个正数，小数点右边1-10个正数） -->
@@ -1476,6 +1476,20 @@
                                         <isNull>true</isNull>
                                 </parameter>
                                 <parameter>
+                                        <!-- 是否返回count计数（用于分页统计）（1:返回count计数） -->
+                                        <name>data_count</name>
+                                        <type>integer</type>
+                                        <format>^1$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 是否包括发票（0:不包含发票 1:包含发票） -->
+                                        <name>has_invoice</name>
+                                        <type>integer</type>
+                                        <format>^[01]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
                                         <!-- 偏移（大于等于0的数字） -->
                                         <name>offset</name>
                                         <type>integer</type>
@@ -1855,6 +1869,13 @@
                                         <name>status</name>
                                         <type>integer</type>
                                         <format>^[01]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 是否返回count计数（用于分页统计）（1:返回count计数） -->
+                                        <name>data_count</name>
+                                        <type>integer</type>
+                                        <format>^1$</format>
                                         <isNull>true</isNull>
                                 </parameter>
                                 <parameter>
@@ -3426,8 +3447,8 @@
                         </parameters>
                 </servlet>
                 <servlet>
-                        <!-- 名称: 添加发票信息 -->
-                        <servletName>addInvoiceInformation</servletName>
+                        <!-- 名称: 添加贸易发票信息 -->
+                        <servletName>addTradeInvoiceInformation</servletName>
                         <sdboType>transaction</sdboType>
                         <namespace>
                                 <!-- 检查附件的合法性 -->
@@ -3439,7 +3460,123 @@
                                 <!-- 保存附件为永久性文件 -->
                                 custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
                         </namespace>
-                        <permission>fjTrade_addInvoiceInformation</permission>
+                        <permission>fjTrade_addTradeInvoiceInformation</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- uuid主键 -->
+                                        <name>uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 上传目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>cluster_list</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 合同编号 -->
+                                        <name>contract_code</name>
+                                        <type>string</type>
+                                        <format>^[A-Z]{2,}-[A-Z]{2,}-[0-9]{5,}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 库存类型（0:入库 1:出库） -->
+                                        <name>type</name>
+                                        <type>integer</type>
+                                        <format>^[01]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 产品名称（2-32个汉字、字符或数字） -->
+                                        <name>product_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 单价（小数点左边1-10个正数，小数点右边1-10个正数） -->
+                                        <name>price</name>
+                                        <type>double</type>
+                                        <format>^([0-9]{1,10}+)(\.[0-9]{1,10}+)?$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 数量（小数点左边1-10个正数，小数点右边1-10个正数） -->
+                                        <name>quantity</name>
+                                        <type>double</type>
+                                        <format>^([0-9]{1,10}+)(\.[0-9]{1,10}+)?$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 单位（1-16个汉字、字符或数字） -->
+                                        <name>unit</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{1,16}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 税率（小数点左边1-10个正数，小数点右边1-10个正数） -->
+                                        <name>tax_rate</name>
+                                        <type>double</type>
+                                        <format>^([0-9]{1,10}+)(\.[0-9]{1,10}+)?$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 开票时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>invoice_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 备注（2-128个汉字、字符或数字） -->
+                                        <name>remark</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 添加物流发票信息 -->
+                        <servletName>addLogisticsInvoiceInformation</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 检查附件的合法性 -->
+                                custom,@lego_storage.Custom.t_checkFilesExist:directory_uuid,cluster_list,file_status->status,creator_uuid;
+                                <!-- 检查合同编号是否存在 -->
+                                select,@lego_fjTrade.selectContractLogistics:contract_code;
+                                <!-- 添加数据 -->
+                                insert,insertInvoiceInformation:uuid,contract_code,type,product_name,price,quantity,unit,tax_rate,invoice_datetime,cluster_list,remark;
+                                <!-- 保存附件为永久性文件 -->
+                                custom,@lego_storage.Custom.t_savePermanentFiles:cluster_list,creator_uuid
+                        </namespace>
+                        <permission>fjTrade_addLogisticsInvoiceInformation</permission>
                         <parameters>
                                 <parameter>
                                         <!-- uuid主键 -->
@@ -3591,8 +3728,8 @@
                         </parameters>
                 </servlet>
                 <servlet>
-                        <!-- 名称: 修改发票信息 -->
-                        <servletName>modifyInvoiceInformation</servletName>
+                        <!-- 名称: 修改贸易发票信息 -->
+                        <servletName>modifyTradeInvoiceInformation</servletName>
                         <sdboType>transaction</sdboType>
                         <namespace>
                                 <!-- 编辑附件 -->
@@ -3602,7 +3739,156 @@
                                 <!-- 修改数据 -->
                                 update,updateInvoiceInformation:idColumnValue->uuid,contract_code,type,product_name,price,quantity,unit,tax_rate,invoice_datetime,cluster_list,remark,sn_remark
                         </namespace>
-                        <permission>fjTrade_modifyInvoiceInformation</permission>
+                        <permission>fjTrade_modifyTradeInvoiceInformation</permission>
+                        <parameters>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
+                                        <name>idColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在数据的唯一列值（如：“uuid”对应的数据） -->
+                                        <name>idColumnValue</name>
+                                        <type>string</type>
+                                        <format>^[0-9a-zA-Z]{32}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 查询文件集群所在数据的名空间 -->
+                                        <name>selectNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_fjTrade.selectInvoiceInformation</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 更新文件集群所在数据的名空间 -->
+                                        <name>updateNamespace</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>lego_fjTrade.updateInvoiceInformation</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群所在表中的列名（当一个表中存有多个附件的时候，列名会有不同的情况） -->
+                                        <name>clusterListColumnName</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>cluster_list</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”文件集群集合（不带“-”的uuid，且以分号结尾） -->
+                                        <name>newClusterList</name>
+                                        <type>string</type>
+                                        <format>^([0-9a-zA-Z]{32};)+$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- “新”集群文件的目录uuid（附件目录） -->
+                                        <name>directory_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件状态（1:正常 2:过期） -->
+                                        <name>file_status</name>
+                                        <type>integer</type>
+                                        <format>#constant#</format>
+                                        <constant>1</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 文件集群创建者的uuid -->
+                                        <name>creator_uuid</name>
+                                        <type>string</type>
+                                        <format>#constant#</format>
+                                        <constant>#session_user_uuid</constant>
+                                </parameter>
+                                <parameter>
+                                        <!-- 合同编号 -->
+                                        <name>contract_code</name>
+                                        <type>string</type>
+                                        <format>^[A-Z]{2,}-[A-Z]{2,}-[0-9]{5,}$</format>
+                                        <isNull>false</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 库存类型（0:入库 1:出库） -->
+                                        <name>type</name>
+                                        <type>integer</type>
+                                        <format>^[01]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 产品名称（2-32个汉字、字符或数字） -->
+                                        <name>product_name</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 单价（小数点左边1-10个正数，小数点右边1-10个正数） -->
+                                        <name>price</name>
+                                        <type>double</type>
+                                        <format>^([0-9]{1,10}+)(\.[0-9]{1,10}+)?$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 数量（小数点左边1-10个正数，小数点右边1-10个正数） -->
+                                        <name>quantity</name>
+                                        <type>double</type>
+                                        <format>^([0-9]{1,10}+)(\.[0-9]{1,10}+)?$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 单位（1-16个汉字、字符或数字） -->
+                                        <name>unit</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{1,16}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 税率（小数点左边1-10个正数，小数点右边1-10个正数） -->
+                                        <name>tax_rate</name>
+                                        <type>double</type>
+                                        <format>^([0-9]{1,10}+)(\.[0-9]{1,10}+)?$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 开票时间（yyyy-MM-dd HH:mm:ss） -->
+                                        <name>invoice_datetime</name>
+                                        <type>timestamp</type>
+                                        <format>^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\s+([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 备注（2-128个汉字、字符或数字） -->
+                                        <name>remark</name>
+                                        <type>string</type>
+                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,128}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 备注（置空） -->
+                                        <name>sn_remark</name>
+                                        <type>string</type>
+                                        <format>^set_null$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                        </parameters>
+                </servlet>
+                <servlet>
+                        <!-- 名称: 修改物流发票信息 -->
+                        <servletName>modifyLogisticsInvoiceInformation</servletName>
+                        <sdboType>transaction</sdboType>
+                        <namespace>
+                                <!-- 编辑附件 -->
+                                custom,@lego_storage.Custom.t_modifyAttachment:idColumnName,idColumnValue,selectNamespace,updateNamespace,clusterListColumnName,newClusterList,directory_uuid,file_status->status;
+                                <!-- 检查合同编号是否存在 -->
+                                select,@lego_fjTrade.selectContractLogistics:contract_code;
+                                <!-- 修改数据 -->
+                                update,updateInvoiceInformation:idColumnValue->uuid,contract_code,type,product_name,price,quantity,unit,tax_rate,invoice_datetime,cluster_list,remark,sn_remark
+                        </namespace>
+                        <permission>fjTrade_modifyLogisticsInvoiceInformation</permission>
                         <parameters>
                                 <parameter>
                                         <!-- 文件集群所在数据的唯一列名（如：“uuid”） -->
@@ -5466,7 +5752,7 @@
                                         <name>vehicle_information_uuid</name>
                                         <type>string</type>
                                         <format>^[0-9a-zA-Z]{32}$</format>
-                                        <isNull>true</isNull>
+                                        <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
                                         <!-- 数量（小数点左边1-10个正数，小数点右边1-10个正数） -->
@@ -5700,7 +5986,7 @@
                                         <name>vehicle_information_uuid</name>
                                         <type>string</type>
                                         <format>^[0-9a-zA-Z]{32}$</format>
-                                        <isNull>true</isNull>
+                                        <isNull>false</isNull>
                                 </parameter>
                         </parameters>
                 </servlet>

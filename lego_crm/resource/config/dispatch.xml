@@ -165,6 +165,13 @@
                                         <isNull>true</isNull>
                                 </parameter>
                                 <parameter>
+                                        <!-- 是否返回count计数（用于分页统计）（1:返回count计数） -->
+                                        <name>data_count</name>
+                                        <type>integer</type>
+                                        <format>^1$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
                                         <!-- 偏移（大于等于0的数字） -->
                                         <name>offset</name>
                                         <type>integer</type>
@@ -388,6 +395,13 @@
                                         <name>short_name</name>
                                         <type>string</type>
                                         <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <isNull>true</isNull>
+                                </parameter>
+                                <parameter>
+                                        <!-- 是否返回count计数（用于分页统计）（1:返回count计数） -->
+                                        <name>data_count</name>
+                                        <type>integer</type>
+                                        <format>^1$</format>
                                         <isNull>true</isNull>
                                 </parameter>
                                 <parameter>

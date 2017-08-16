@@ -57,7 +57,15 @@
                 </where>
         </update>
         <select id = "selectContact" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
-                <![CDATA[select * from `crm_contact`]]>
+                <choose>
+                        <!-- 如果获取分页，需要返回count。 -->
+                        <when test = "1 == data_count">
+                                <![CDATA[select count(*) as `count` from `crm_contact`]]>
+                        </when>
+                        <otherwise>
+                                <![CDATA[select * from `crm_contact`]]>
+                        </otherwise>
+                </choose>
                 <where>
                         <if test = "null != uuid">
                                 <![CDATA[and `uuid` = #{uuid}]]>
@@ -139,7 +147,15 @@
                 </where>
         </update>
         <select id = "selectEnterpriseInformation" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
-                <![CDATA[select * from `crm_enterprise-information`]]>
+                <choose>
+                        <!-- 如果获取分页，需要返回count。 -->
+                        <when test = "1 == data_count">
+                                <![CDATA[select count(*) as `count` from `crm_enterprise-information`]]>
+                        </when>
+                        <otherwise>
+                                <![CDATA[select * from `crm_enterprise-information`]]>
+                        </otherwise>
+                </choose>
                 <where>
                         <if test = "null != uuid">
                                 <![CDATA[and `uuid` = #{uuid}]]>

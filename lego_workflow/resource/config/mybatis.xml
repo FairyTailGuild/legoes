@@ -13,6 +13,37 @@
                         </if>
                 </where>
         </delete>
+        <update id = "updateRootDepartment" parameterType = "java.util.HashMap">
+                <![CDATA[update `workflow_department`]]>
+                <set>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "'set_null' == sn_name">
+                                <![CDATA[`name` = null,]]>
+                        </if>
+                        <if test = "null != description">
+                                <![CDATA[`description` = #{description},]]>
+                        </if>
+                        <if test = "'set_null' == sn_description">
+                                <![CDATA[`description` = null,]]>
+                        </if>
+                        <if test = "null != order_offset">
+                                <![CDATA[`order_offset` = #{order_offset},]]>
+                        </if>
+                        <if test = "'set_null' == sn_order_offset">
+                                <![CDATA[`order_offset` = null,]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != parent_uuid">
+                                <![CDATA[and `parent_uuid` = #{parent_uuid}]]>
+                        </if>
+                </where>
+        </update>
         <update id = "updateDepartment" parameterType = "java.util.HashMap">
                 <![CDATA[update `workflow_department`]]>
                 <set>

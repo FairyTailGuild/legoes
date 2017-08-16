@@ -7,7 +7,7 @@
                         <sdboType>transaction</sdboType>
                         <namespace>
                                 <!-- 检查部门名称是否重名 -->
-                                non-select,selectDepartment:parent_uuid,name;
+                                non-select,selectDepartment:parent_uuid;
                                 <!-- 添加数据 -->
                                 insert,insertDepartment:uuid,parent_uuid,name,description,order_offset
                         </namespace>
@@ -142,7 +142,7 @@
                                 <!-- 检查除此之外的部门名称是否重名 -->
                                 non-select,selectDepartment:uuid->ne_uuid,name;
                                 <!-- 修改数据 -->
-                                update,updateDepartment:uuid,parent_uuid,name,description,sn_description,order_offset
+                                update,updateRootDepartment:uuid,parent_uuid,name,description,sn_description,order_offset
                         </namespace>
                         <permission>workflow_modifyDepartment</permission>
                         <parameters>
@@ -491,7 +491,7 @@
                                         <name>department_uuid</name>
                                         <type>string</type>
                                         <format>^[0-9a-zA-Z]{32}$</format>
-                                        <isNull>false</isNull>
+                                        <isNull>true</isNull>
                                 </parameter>
                         </parameters>
                 </servlet>
