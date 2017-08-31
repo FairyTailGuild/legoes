@@ -1813,9 +1813,134 @@
                                 <![CDATA[and `name` = #{name}]]>
                         </if>
                 </where>
-                <![CDATA[ order by `id` desc]]>
+                <![CDATA[ order by `id` asc]]>
                 <if test = "null != offset and null != rows">
                         <![CDATA[ limit #{offset},#{rows}]]>
                 </if>
+        </select>
+        <!-- 储罐原料[fj-trade_warehouse-pot-material] -->
+        <insert id = "insertWarehousePotMaterial" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_warehouse-pot-material` (`uuid`, `pot_uuid`, `name`, `check_value`) values (#{uuid}, #{pot_uuid}, #{name}, #{check_value})]]>
+        </insert>
+        <delete id = "deleteWarehousePotMaterial" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_warehouse-pot-material`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != pot_uuid">
+                                <![CDATA[and `pot_uuid` = #{pot_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateWarehousePotMaterial" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_warehouse-pot-material`]]>
+                <set>
+                        <if test = "null != pot_uuid">
+                                <![CDATA[`pot_uuid` = #{pot_uuid},]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[`name` = #{name},]]>
+                        </if>
+                        <if test = "null != check_value">
+                                <![CDATA[`check_value` = #{check_value},]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectWarehousePotMaterial" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_warehouse-pot-material`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != pot_uuid">
+                                <![CDATA[and `pot_uuid` = #{pot_uuid}]]>
+                        </if>
+                        <if test = "null != name">
+                                <![CDATA[and `name` = #{name}]]>
+                        </if>
+                        <if test = "null != check_value">
+                                <![CDATA[and `check_value` = #{check_value}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `id` asc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 储罐原料[fj-trade_warehouse-pot-material-record] -->
+        <insert id = "insertWarehousePotMaterialRecord" parameterType = "java.util.HashMap">
+                <![CDATA[insert into `fj-trade_warehouse-pot-material-record` (`uuid`, `material_uuid`, `entry_value`, `entry_datetime`) values (#{uuid}, #{material_uuid}, #{entry_value}, #{entry_datetime})]]>
+        </insert>
+        <delete id = "deleteWarehousePotMaterialRecord" parameterType = "java.util.HashMap">
+                <![CDATA[delete from `fj-trade_warehouse-pot-material-record`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != material_uuid">
+                                <![CDATA[and `material_uuid` = #{material_uuid}]]>
+                        </if>
+                </where>
+        </delete>
+        <update id = "updateWarehousePotMaterialRecord" parameterType = "java.util.HashMap">
+                <![CDATA[update `fj-trade_warehouse-pot-material-record`]]>
+                <set>
+                        <if test = "null != material_uuid">
+                                <![CDATA[`material_uuid` = #{material_uuid},]]>
+                        </if>
+                        <if test = "null != entry_value">
+                                <![CDATA[`entry_value` = #{entry_value},]]>
+                        </if>
+                        <if test = "null != entry_datetime">
+                                <![CDATA[`entry_datetime` = #{entry_datetime},]]>
+                        </if>
+                </set>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                </where>
+        </update>
+        <select id = "selectWarehousePotMaterialRecord" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select * from `fj-trade_warehouse-pot-material-record`]]>
+                <where>
+                        <if test = "null != uuid">
+                                <![CDATA[and `uuid` = #{uuid}]]>
+                        </if>
+                        <if test = "null != ne_uuid">
+                                <![CDATA[and `uuid` != #{ne_uuid}]]>
+                        </if>
+                        <if test = "null != material_uuid">
+                                <![CDATA[and `material_uuid` = #{material_uuid}]]>
+                        </if>
+                        <if test = "null != entry_value">
+                                <![CDATA[and `entry_value` = #{entry_value}]]>
+                        </if>
+                        <if test = "null != entry_datetime">
+                                <![CDATA[and `entry_datetime` = #{entry_datetime}]]>
+                        </if>
+                </where>
+                <![CDATA[ order by `entry_datetime` desc]]>
+                <if test = "null != offset and null != rows">
+                        <![CDATA[ limit #{offset},#{rows}]]>
+                </if>
+        </select>
+        <!-- 获取所有原料的入库值总和[fj-trade_warehouse-pot-material-record] -->
+        <select id = "selectWarehousePotMaterialRecordSum" parameterType = "java.util.HashMap" resultType = "java.util.HashMap">
+                <![CDATA[select ifnull(sum(`entry_value`), 0) as `sum` from `fj-trade_warehouse-pot-material-record`]]>
+                <where>
+                        <if test = "null != material_uuid">
+                                <![CDATA[and `material_uuid` = #{material_uuid}]]>
+                        </if>
+                </where>
         </select>
 </mapper>

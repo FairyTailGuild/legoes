@@ -94,7 +94,7 @@
                                 <![CDATA[and `name` = #{name}]]>
                         </if>
                 </where>
-                <![CDATA[ order by `order_offset`]]>
+                <!-- <![CDATA[ order by `order_offset`]]> -->
                 <if test = "null != offset and null != rows">
                         <![CDATA[ limit #{offset},#{rows}]]>
                 </if>
@@ -164,7 +164,7 @@
                                 <![CDATA[and `name` = #{name}]]>
                         </if>
                 </where>
-                <![CDATA[ order by `order_offset`]]>
+                <!-- <![CDATA[ order by `order_offset`]]> -->
                 <if test = "null != offset and null != rows">
                         <![CDATA[ limit #{offset},#{rows}]]>
                 </if>
@@ -267,7 +267,7 @@
                                 <![CDATA[and `work_area_uuid` = #{work_area_uuid}]]>
                         </if>
                 </where>
-                <![CDATA[ order by `order_offset`]]>
+                <!-- <![CDATA[ order by `order_offset`]]> -->
                 <if test = "null != offset and null != rows">
                         <![CDATA[ limit #{offset},#{rows}]]>
                 </if>

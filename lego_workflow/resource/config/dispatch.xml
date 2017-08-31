@@ -28,10 +28,10 @@
                                         <constant>00000000000000000000000000000000</constant>
                                 </parameter>
                                 <parameter>
-                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <!-- 部门名称（2-32个任意字符） -->
                                         <name>name</name>
                                         <type>string</type>
-                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <format>^.{2,32}$</format>
                                         <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
@@ -79,10 +79,10 @@
                                         <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
-                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <!-- 部门名称（2-32个任意字符） -->
                                         <name>name</name>
                                         <type>string</type>
-                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <format>^.{2,32}$</format>
                                         <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
@@ -111,7 +111,7 @@
                                 <!-- 获取所有岗位是当前部门的uuid -->
                                 result-foreach-select->allSubPositionList|uuid|department_uuid,selectPosition:uuid->department_uuid;
                                 <!-- 遍历检查当前部门下的所有岗位中是否包含员工 -->
-                                foreach-non-select->allSubPositionList|position_uuid,selectEmployee:position_uuid;
+                                <!-- foreach-non-select->allSubPositionList|position_uuid,selectEmployee:position_uuid; -->
                                 <!-- 遍历删除当前部门为父部门的部门数据 -->
                                 foreach-delete->allSubDepList|uuid,deleteDepartment:uuid;
                                 <!-- 遍历删除部门为当前部门的岗位数据 -->
@@ -119,7 +119,9 @@
                                 <!-- 删除当前部门的数据 -->
                                 delete,deleteDepartment:uuid;
                                 <!-- 删除部门为当前部门的岗位数据 -->
-                                insist-delete,deletePosition:uuid->department_uuid
+                                insist-delete,deletePosition:uuid->department_uuid,
+                                <!-- 删除部门为当前部门的员工数据 -->
+                                insist-delete,deleteEmployee:uuid->position_uuid
                         </namespace>
                         <permission>workflow_removeDepartment</permission>
                         <parameters>
@@ -161,10 +163,10 @@
                                         <constant>00000000000000000000000000000000</constant>
                                 </parameter>
                                 <parameter>
-                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <!-- 部门名称（2-32个任意字符） -->
                                         <name>name</name>
                                         <type>string</type>
-                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <format>^.{2,32}$</format>
                                         <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
@@ -219,10 +221,10 @@
                                         <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
-                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <!-- 部门名称（2-32个任意字符） -->
                                         <name>name</name>
                                         <type>string</type>
-                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <format>^.{2,32}$</format>
                                         <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
@@ -265,10 +267,10 @@
                                         <isNull>false</isNull>
                                 </parameter>
                                 <parameter>
-                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <!-- 部门名称（2-32个任意字符） -->
                                         <name>name</name>
                                         <type>string</type>
-                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <format>^.{2,32}$</format>
                                         <isNull>false</isNull>
                                 </parameter>
                         </parameters>
@@ -295,10 +297,10 @@
                                         <isNull>true</isNull>
                                 </parameter>
                                 <parameter>
-                                        <!-- 部门名称（2-32个汉字、字符或数字） -->
+                                        <!-- 部门名称（2-32个任意字符） -->
                                         <name>name</name>
                                         <type>string</type>
-                                        <format>^[\u4e00-\u9fffa0-9a-zA-Z]{2,32}$</format>
+                                        <format>^.{2,32}$</format>
                                         <isNull>true</isNull>
                                 </parameter>
                                 <parameter>
@@ -375,6 +377,8 @@
                         <namespace>
                                 <!-- 检查当前岗位是否包含员工 -->
                                 <!-- non-select,selectEmployee:uuid->position_uuid; -->
+                                <!-- 删除当前岗位的下的员工 -->
+                                insist-delete,deleteEmployee:uuid->position_uuid;
                                 <!-- 删除当前岗位的数据 -->
                                 delete,deletePosition:uuid;
                         </namespace>
